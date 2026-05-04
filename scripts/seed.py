@@ -217,11 +217,11 @@ def seed_terms(client, schools_data: list, dry_run: bool = False) -> Tuple[int, 
         terms.append({
             "institution_id": facility_code,
             "term_name": "Fall 2026",
-            "begin_date": date(2026, 8, 24),
-            "end_date": date(2026, 12, 11),
-            "add_drop_deadline": date(2026, 9, 4),
-            "census_date": date(2026, 9, 21),
-            "withdrawal_deadline": date(2026, 11, 1),
+            "begin_date": "2026-08-24",
+            "end_date": "2026-12-11",
+            "add_drop_deadline": "2026-09-04",
+            "census_date": "2026-09-21",
+            "withdrawal_deadline": "2026-11-01",
             "active": True,
         })
 
