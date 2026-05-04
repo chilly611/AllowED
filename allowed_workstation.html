@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AllowED SCO Workstation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --dark: #0F172A;
+            --blue: #1E40AF;
+            --orange: #F97316;
+            --green: #10B981;
+            --amber: #F59E0B;
+            --red: #EF4444;
+            --slate-50: #F8FAFC;
+            --slate-100: #F1F5F9;
+            --slate-200: #E2E8F0;
+            --slate-300: #CBD5E1;
+            --slate-400: #94A3B8;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --slate-800: #1E293B;
+            --slate-900: #0F172A;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--slate-50);
+            color: var(--slate-900);
+            overflow: hidden;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* LOGIN SCREEN */
+        /* ═══════════════════════════════════════════════════════════════ */
+
+        .login-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--blue), var(--dark));
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 12px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-logo {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--blue), var(--orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-title {
+            font-size: 14px;
+            color: var(--slate-600);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--slate-900);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--slate-200);
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 150ms;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+
+        .form-error {
+            color: var(--red);
+            font-size: 13px;
+            margin-top: 0.5rem;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--blue);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 150ms;
+        }
+
+        .login-btn:hover {
+            background: #1E3A8A;
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+        }
+
+        .login-btn:active {
+            transform: translateY(1px);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .demo-btn {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--slate-100);
+            color: var(--slate-900);
+            border: 1px solid var(--slate-200);
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.75rem;
+            transition: all 150ms;
+        }
+
+        .demo-btn:hover {
+            background: var(--slate-200);
+        }
+
+        .auth-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--red);
+            color: var(--red);
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            font-size: 13px;
+        }
+
+        .auth-loading {
+            text-align: center;
+            font-size: 13px;
+            color: var(--slate-600);
+            margin-top: 1rem;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* MAIN LAYOUT */
+        /* ═══════════════════════════════════════════════════════════════ */
+
+        .container {
+            display: none;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .container.logged-in {
+            display: flex;
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+            background: white;
+            border-bottom: 1px solid var(--slate-200);
+            height: 70px;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--blue), var(--orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .top-bar-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .institution-name {
+            font-size: 13px;
+            color: var(--slate-600);
+        }
+
+        .logout-btn {
+            padding: 6px 12px;
+            background: var(--slate-100);
+            color: var(--slate-900);
+            border: 1px solid var(--slate-200);
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 150ms;
+        }
+
+        .logout-btn:hover {
+            background: var(--slate-200);
+        }
+
+        .main-layout {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 80px;
+            background: var(--dark);
+            display: flex;
+            flex-direction: column;
+            padding: 1rem 0;
+            gap: 2rem;
+            border-right: 1px solid var(--slate-200);
+        }
+
+        .nav-icon {
+            width: 100%;
+            height: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            cursor: pointer;
+            color: var(--slate-300);
+            font-size: 24px;
+            text-decoration: none;
+            transition: all 150ms;
+            border-left: 3px solid transparent;
+            border: none;
+            background: none;
+        }
+
+        .nav-icon:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-icon.active {
+            color: var(--orange);
+            border-left-color: var(--orange);
+            background: rgba(249, 115, 22, 0.1);
+        }
+
+        .nav-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .view {
+            display: none;
+            flex: 1;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .view.active {
+            display: flex;
+        }
+
+        .view-header {
+            padding: 2rem;
+            border-bottom: 1px solid var(--slate-200);
+        }
+
+        .view-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--slate-900);
+        }
+
+        .view-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* DASHBOARD */
+        /* ═══════════════════════════════════════════════════════════════ */
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .dashboard-card {
+            background: white;
+            border: 1px solid var(--slate-200);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .card-label {
+            font-size: 12px;
+            color: var(--slate-600);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.75rem;
+        }
+
+        .card-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--blue);
+        }
+
+        .card-subtext {
+            font-size: 13px;
+            color: var(--slate-600);
+            margin-top: 0.5rem;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* TABLES */
+        /* ═══════════════════════════════════════════════════════════════ */
+
+        .table-wrapper {
+            background: white;
+            border: 1px solid var(--slate-200);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th {
+            background: var(--slate-100);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--slate-600);
+            border-bottom: 1px solid var(--slate-200);
+        }
+
+        .table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--slate-200);
+            font-size: 13px;
+        }
+
+        .table tr:hover {
+            background: var(--slate-50);
+        }
+
+        .table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-row-clickable {
+            cursor: pointer;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* STATUS BADGES */
+        /* ═══════════════════════════════════════════════════════════════ */
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge.ready {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--green);
+        }
+
+        .badge.review {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--amber);
+        }
+
+        .badge.submitted {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--blue);
+        }
+
+        .badge.certified {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--green);
+        }
+
+        .badge.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--red);
+        }
+
+        .badge.pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--amber);
+        }
+
+        .badge.complete {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--green);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* BUTTONS */
+        /* ═══════════════════════════════════════════════════════════════ */
+
+        .btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 150ms;
+        }
+
+        .btn-primary {
+            background: var(--blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1E3A8A;
+        }
+
+        .btn-success {
+            background: var(--green);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-secondary {
+            background: var(--slate-100);
+            color: var(--slate-900);
+            border: 1px solid var(--slate-200);
+        }
+
+        .btn-secondary:hover {
+            background: var(--slate-200);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* PAGINATION */
+        /* ═══════════════════════════════════════════════════════════════ */
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .pagination button {
+            padding: 6px 12px;
+            border: 1px solid var(--slate-200);
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .pagination button:hover {
+            background: var(--slate-100);
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* TOASTS */
+        /* ═══════════════════════════════════════════════════════════════ */
+
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: var(--slate-900);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            animation: slideIn 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: auto;
+            font-size: 13px;
+        }
+
+        .toast.success {
+            background: var(--green);
+        }
+
+        .toast.error {
+            background: var(--red);
+        }
+
+        .toast.warning {
+            background: var(--amber);
+            color: var(--slate-900);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* SCROLLBAR */
+        /* ═══════════════════════════════════════════════════════════════ */
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--slate-300);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--slate-400);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* EMPTY STATE */
+        /* ═══════════════════════════════════════════════════════════════ */
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--slate-600);
+            text-align: center;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--slate-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-text {
+            font-size: 13px;
+            color: var(--slate-600);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--slate-600);
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--slate-200);
+            border-top-color: var(--blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- LOGIN SCREEN -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-container">
+            <div class="login-logo">AllowED</div>
+            <div class="login-title">SCO Workstation</div>
+
+            <div id="authError" class="auth-error" style="display: none;"></div>
+
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" id="emailInput" class="form-input" placeholder="your@email.com">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" id="passwordInput" class="form-input" placeholder="••••••••">
+            </div>
+
+            <button class="login-btn" id="loginBtn" onclick="handleLogin()">Sign In</button>
+            <button class="demo-btn" id="demoBtn" onclick="handleDemoMode()">Demo Mode (Dev)</button>
+
+            <div class="auth-loading" id="authLoading" style="display: none;">
+                <div class="spinner"></div> Authenticating...
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APPLICATION -->
+    <div class="container" id="mainContainer">
+        <!-- TOP BAR -->
+        <div class="top-bar">
+            <div class="logo">AllowED</div>
+            <div class="top-bar-right">
+                <div class="institution-name" id="institutionName">San Diego State University</div>
+                <button class="logout-btn" onclick="handleLogout()">Log Out</button>
+            </div>
+        </div>
+
+        <!-- MAIN LAYOUT -->
+        <div class="main-layout">
+            <!-- SIDEBAR -->
+            <div class="sidebar">
+                <button class="nav-icon active" data-view="dashboard" onclick="switchView(event, 'dashboard')" title="Dashboard">
+                    <span>📊</span>
+                    <span class="nav-label">Dashboard</span>
+                </button>
+                <button class="nav-icon" data-view="students" onclick="switchView(event, 'students')" title="Students">
+                    <span>👥</span>
+                    <span class="nav-label">Students</span>
+                </button>
+                <button class="nav-icon" data-view="hitl" onclick="switchView(event, 'hitl')" title="HITL Queue">
+                    <span>⚠️</span>
+                    <span class="nav-label">HITL</span>
+                </button>
+                <button class="nav-icon" data-view="amendments" onclick="switchView(event, 'amendments')" title="Amendments">
+                    <span>✏️</span>
+                    <span class="nav-label">Amend</span>
+                </button>
+                <button class="nav-icon" data-view="tf" onclick="switchView(event, 'tf')" title="T&F Records">
+                    <span>📋</span>
+                    <span class="nav-label">T&F</span>
+                </button>
+                <button class="nav-icon" data-view="audit" onclick="switchView(event, 'audit')" title="Audit Log">
+                    <span>📜</span>
+                    <span class="nav-label">Audit</span>
+                </button>
+            </div>
+
+            <!-- CONTENT AREA -->
+            <div class="content">
+                <!-- DASHBOARD VIEW -->
+                <div class="view active" id="dashboard-view">
+                    <div class="view-header">
+                        <div class="view-title">Dashboard</div>
+                    </div>
+                    <div class="view-body">
+                        <div class="dashboard-grid" id="dashboardGrid">
+                            <div class="dashboard-card">
+                                <div class="card-label">Total Students</div>
+                                <div class="card-value" id="dashTotalStudents">-</div>
+                            </div>
+                            <div class="dashboard-card">
+                                <div class="card-label">Ready for Cert</div>
+                                <div class="card-value" id="dashReadyForCert">-</div>
+                            </div>
+                            <div class="dashboard-card">
+                                <div class="card-label">HITL Pending</div>
+                                <div class="card-value" id="dashHitlPending">-</div>
+                            </div>
+                            <div class="dashboard-card">
+                                <div class="card-label">Amendments</div>
+                                <div class="card-value" id="dashAmendments">-</div>
+                            </div>
+                            <div class="dashboard-card">
+                                <div class="card-label">T&F Pending</div>
+                                <div class="card-value" id="dashTfPending">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STUDENTS VIEW -->
+                <div class="view" id="students-view">
+                    <div class="view-header">
+                        <div class="view-title">Students</div>
+                    </div>
+                    <div class="view-body">
+                        <div class="table-wrapper">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Student ID</th>
+                                        <th>Program</th>
+                                        <th>Chapter</th>
+                                        <th>Status</th>
+                                        <th>Units</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="studentsTableBody">
+                                    <tr><td colspan="6" class="loading"><div class="spinner"></div> Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="pagination" id="studentsPagination"></div>
+                    </div>
+                </div>
+
+                <!-- HITL QUEUE VIEW -->
+                <div class="view" id="hitl-view">
+                    <div class="view-header">
+                        <div class="view-title">HITL Queue</div>
+                    </div>
+                    <div class="view-body">
+                        <div class="table-wrapper">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>Flag Type</th>
+                                        <th>Reason</th>
+                                        <th>Priority</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="hitlTableBody">
+                                    <tr><td colspan="6" class="loading"><div class="spinner"></div> Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AMENDMENTS VIEW -->
+                <div class="view" id="amendments-view">
+                    <div class="view-header">
+                        <div class="view-title">Amendments</div>
+                    </div>
+                    <div class="view-body">
+                        <div class="table-wrapper">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>Reason</th>
+                                        <th>Original</th>
+                                        <th>Revised</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="amendmentsTableBody">
+                                    <tr><td colspan="6" class="loading"><div class="spinner"></div> Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- T&F VIEW -->
+                <div class="view" id="tf-view">
+                    <div class="view-header">
+                        <div class="view-title">T&F Records</div>
+                    </div>
+                    <div class="view-body">
+                        <div class="table-wrapper">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>Chapter</th>
+                                        <th>Program</th>
+                                        <th>Enrollment Cert</th>
+                                        <th>T&F Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tfTableBody">
+                                    <tr><td colspan="6" class="loading"><div class="spinner"></div> Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AUDIT LOG VIEW -->
+                <div class="view" id="audit-view">
+                    <div class="view-header">
+                        <div class="view-title">Audit Log</div>
+                    </div>
+                    <div class="view-body">
+                        <div class="table-wrapper">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Timestamp</th>
+                                        <th>User</th>
+                                        <th>Action</th>
+                                        <th>Entity</th>
+                                        <th>Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="auditTableBody">
+                                    <tr><td colspan="5" class="loading"><div class="spinner"></div> Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="pagination" id="auditPagination"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATIONS -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Supabase Auth JS - with graceful fallback -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* CONFIGURATION */
+        /* ═══════════════════════════════════════════════════════════════ */
+
+        const API_BASE = 'http://localhost:8000';
+        const SUPABASE_URL = 'https://cwxkpsnjsxaupncqyojq.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_daUIjVuDqEMuV09SQEzUFw_BFQzulgt';
+
+        let authToken = null;
+        let currentUser = null;
+        let supabaseClient = null;
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* INITIALIZATION */
+        /* ═══════════════════════════════════════════════════════════════ */
+
+        async function initApp() {
+            // Try to initialize Supabase
+            if (typeof window.supabase !== 'undefined') {
+                supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            } else {
+                console.warn('Supabase JS not available - auth disabled, demo mode only');
+            }
+
+            // Check if already logged in (from demo mode)
+            const savedToken = sessionStorage.getItem('authToken');
+            if (savedToken) {
+                authToken = savedToken;
+                showMainApp();
+                loadDashboard();
+            }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* AUTHENTICATION */
+        /* ═══════════════════════════════════════════════════════════════ */
+
+        async function handleLogin() {
+            const email = document.getElementById('emailInput').value.trim();
+            const password = document.getElementById('passwordInput').value.trim();
+            const errorEl = document.getElementById('authError');
+            const loadingEl = document.getElementById('authLoading');
+            const loginBtn = document.getElementById('loginBtn');
+
+            errorEl.style.display = 'none';
+
+            if (!email || !password) {
+                errorEl.textContent = 'Please enter email and password';
+                errorEl.style.display = 'block';
+                return;
+            }
+
+            loadingEl.style.display = 'block';
+            loginBtn.disabled = true;
+
+            try {
+                if (!supabaseClient) {
+                    throw new Error('Authentication service unavailable. Use Demo Mode or open in a standard browser.');
+                }
+
+                const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+                if (error) {
+                    throw error;
+                }
+
+                authToken = data.session.access_token;
+                currentUser = data.user;
+                sessionStorage.setItem('authToken', authToken);
+
+                loadingEl.style.display = 'none';
+                showMainApp();
+                loadDashboard();
+            } catch (err) {
+                errorEl.textContent = err.message || 'Authentication failed';
+                errorEl.style.display = 'block';
+                loadingEl.style.display = 'none';
+                loginBtn.disabled = false;
+            }
+        }
+
+        function handleDemoMode() {
+            // Mock token for development
+            authToken = 'demo_token_' + Date.now();
+            currentUser = { email: 'demo@allowed.edu', user_metadata: { institution: 'Demo Institution' } };
+            sessionStorage.setItem('authToken', authToken);
+            showMainApp();
+            loadDashboard();
+        }
+
+        function handleLogout() {
+            authToken = null;
+            currentUser = null;
+            sessionStorage.removeItem('authToken');
+            document.getElementById('mainContainer').classList.remove('logged-in');
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('emailInput').value = '';
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('authError').style.display = 'none';
+        }
+
+        function showMainApp() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainContainer').classList.add('logged-in');
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* API INTEGRATION */
+        /* ═══════════════════════════════════════════════════════════════ */
+
+        async function apiCall(path, options = {}) {
+            try {
+                const resp = await fetch(`${API_BASE}${path}`, {
+                    ...options,
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json',
+                        ...(options.headers || {})
+                    }
+                });
+
+                if (resp.status === 401) {
+                    toast('Session expired. Please log in again.', 'error');
+                    handleLogout();
+                    return null;
+                }
+
+                if (!resp.ok) {
+                    let errMsg = `API Error: ${resp.status}`;
+                    try {
+                        const errData = await resp.json();
+                        errMsg = errData.detail || errMsg;
+                    } catch (e) {}
+                    throw new Error(errMsg);
+                }
+
+                return await resp.json();
+            } catch (err) {
+                console.error(`API call failed: ${path}`, err);
+                toast(err.message, 'error');
+                return null;
+            }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* VIEWS & NAVIGATION */
+        /* ═══════════════════════════════════════════════════════════════ */
+
+        function switchView(event, viewName) {
+            event.preventDefault();
+
+            // Update nav icons
+            document.querySelectorAll('.nav-icon').forEach(icon => icon.classList.remove('active'));
+            event.target.closest('.nav-icon').classList.add('active');
+
+            // Update views
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(`${viewName}-view`).classList.add('active');
+
+            // Load view data
+            if (viewName === 'students') loadStudents();
+            else if (viewName === 'hitl') loadHitl();
+            else if (viewName === 'amendments') loadAmendments();
+            else if (viewName === 'tf') loadTfRecords();
+            else if (viewName === 'audit') loadAuditLog();
+            else if (viewName === 'dashboard') loadDashboard();
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* DASHBOARD */
+        /* ═══════════════════════════════════════════════════════════════ */
+
+        async function loadDashboard() {
+            const data = await apiCall('/api/dashboard');
+            if (!data) return;
+
+            document.getElementById('dashTotalStudents').textContent = data.total_students || 0;
+            document.getElementById('dashReadyForCert').textContent = data.ready_for_certification || 0;
+            document.getElementById('dashHitlPending').textContent = data.hitl_pending || 0;
+            document.getElementById('dashAmendments').textContent = data.amendments || 0;
+            document.getElementById('dashTfPending').textContent = data.tf_pending || 0;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* STUDENTS */
+        /* ═══════════════════════════════════════════════════════════════ */
+
+        let currentStudentsPage = 1;
+
+        async function loadStudents(page = 1) {
+            currentStudentsPage = page;
+            const data = await apiCall(`/api/students?term=&status=&page=${page}&limit=10`);
+            if (!data) return;
+
+            const tbody = document.getElementById('studentsTableBody');
+            tbody.innerHTML = '';
+
+            const students = data.students || data.items || [];
+            if (students.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><div class="empty-icon">📭</div><div class="empty-title">No students</div></td></tr>';
+                return;
+            }
+
+            students.forEach(student => {
+                const row = document.createElement('tr');
+                row.className = 'table-row-clickable';
+                row.onclick = () => viewStudentDetail(student.id);
+
+                const statusBadge = `<span class="badge ${student.status || 'pending'}">${student.status || 'pending'}</span>`;
+
+                row.innerHTML = `
+                    <td><strong>${student.name}</strong></td>
+                    <td>${student.student_id || 'N/A'}</td>
+                    <td>${student.program || '-'}</td>
+                    <td>${student.chapter || '-'}</td>
+                    <td>${statusBadge}</td>
+                    <td>${student.units || 0}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            // Pagination
+            const paginationEl = document.getElementById('studentsPagination');
+            paginationEl.innerHTML = '';
+            if (page > 1) {
+                const prevBtn = document.createElement('button');
+                prevBtn.textContent = 'Previous';
+                prevBtn.onclick = () => loadStudents(page - 1);
+                paginationEl.appendChild(prevBtn);
+            }
+            const nextBtn = document.createElement('button');
+            nextBtn.textContent = 'Next';
+            nextBtn.onclick = () => loadStudents(page + 1);
+            paginationEl.appendChild(nextBtn);
+        }
+
+        async function viewStudentDetail(studentId) {
+            const data = await apiCall(`/api/students/${studentId}`);
+            if (!data) return;
+            // For now just show a toast - in a real app would open a detail panel
+            toast(`Viewing student ${data.name || studentId}`, 'warning');
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* HITL QUEUE */
+        /* ═══════════════════════════════════════════════════════════════ */
+
+        async function loadHitl() {
+            const data = await apiCall('/api/hitl-queue?priority=&status=');
+            if (!data) return;
+
+            const tbody = document.getElementById('hitlTableBody');
+            tbody.innerHTML = '';
+
+            const items = data.items || [];
+            if (items.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><div class="empty-icon">✓</div><div class="empty-title">No HITL items</div></td></tr>';
+                return;
+            }
+
+            items.forEach(item => {
+                const row = document.createElement('tr');
+                const priorityColor = item.priority === 'high' ? 'red' : item.priority === 'medium' ? 'orange' : 'yellow';
+                const priorityBadge = `<span class="badge" style="background: rgba(${priorityColor === 'red' ? '239, 68, 68' : priorityColor === 'orange' ? '245, 158, 11' : '253, 224, 71'}, 0.1); color: ${priorityColor === 'red' ? '#EF4444' : priorityColor === 'orange' ? '#F59E0B' : '#FBBF24'};">${item.priority || 'medium'}</span>`;
+                const statusBadge = `<span class="badge ${item.status || 'pending'}">${item.status || 'pending'}</span>`;
+
+                row.innerHTML = `
+                    <td>${item.student_name || 'Unknown'}</td>
+                    <td>${item.flag_type || 'Unknown'}</td>
+                    <td>${item.reason || '-'}</td>
+                    <td>${priorityBadge}</td>
+                    <td>${statusBadge}</td>
+                    <td><button class="btn btn-success" onclick="approveHitl(${item.id})">Approve</button></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        async function approveHitl(itemId) {
+            const data = await apiCall(`/api/hitl-queue/${itemId}/approve`, { method: 'POST' });
+            if (data) {
+                toast('HITL item approved', 'success');
+                loadHitl();
+            }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* AMENDMENTS */
+        /* ═══════════════════════════════════════════════════════════════ */
+
+        async function loadAmendments() {
+            const data = await apiCall('/api/amendments?status=');
+            if (!data) return;
+
+            const tbody = document.getElementById('amendmentsTableBody');
+            tbody.innerHTML = '';
+
+            const items = data.items || [];
+            if (items.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><div class="empty-icon">✓</div><div class="empty-title">No amendments</div></td></tr>';
+                return;
+            }
+
+            items.forEach(item => {
+                const row = document.createElement('tr');
+                const statusBadge = `<span class="badge ${item.status || 'pending'}">${item.status || 'pending'}</span>`;
+
+                row.innerHTML = `
+                    <td>${item.student_name || 'Unknown'}</td>
+                    <td>${item.reason || '-'}</td>
+                    <td>${item.original_value || '-'}</td>
+                    <td>${item.revised_value || '-'}</td>
+                    <td>${statusBadge}</td>
+                    <td><button class="btn btn-success" onclick="approveAmendment(${item.id})">Approve</button></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        async function approveAmendment(itemId) {
+            const data = await apiCall(`/api/amendments/${itemId}/approve`, { method: 'POST' });
+            if (data) {
+                toast('Amendment approved', 'success');
+                loadAmendments();
+            }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* T&F RECORDS */
+        /* ═══════════════════════════════════════════════════════════════ */
+
+        async function loadTfRecords() {
+            const data = await apiCall('/api/tf-records?status=');
+            if (!data) return;
+
+            const tbody = document.getElementById('tfTableBody');
+            tbody.innerHTML = '';
+
+            const items = data.items || [];
+            if (items.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><div class="empty-icon">✓</div><div class="empty-title">No T&F records</div></td></tr>';
+                return;
+            }
+
+            items.forEach(item => {
+                const row = document.createElement('tr');
+                const statusBadge = `<span class="badge ${item.status || 'pending'}">${item.status || 'pending'}</span>`;
+
+                row.innerHTML = `
+                    <td>${item.student_name || 'Unknown'}</td>
+                    <td>${item.chapter || '-'}</td>
+                    <td>${item.program || '-'}</td>
+                    <td><span class="badge certified">✓ Certified</span></td>
+                    <td>${statusBadge}</td>
+                    <td><button class="btn btn-secondary">View</button></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* AUDIT LOG */
+        /* ═══════════════════════════════════════════════════════════════ */
+
+        let currentAuditPage = 1;
+
+        async function loadAuditLog(page = 1) {
+            currentAuditPage = page;
+            const data = await apiCall(`/api/audit-log?page=${page}&limit=20`);
+            if (!data) return;
+
+            const tbody = document.getElementById('auditTableBody');
+            tbody.innerHTML = '';
+
+            const items = data.items || [];
+            if (items.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="empty-state"><div class="empty-icon">📜</div><div class="empty-title">No audit entries</div></td></tr>';
+                return;
+            }
+
+            items.forEach(item => {
+                const row = document.createElement('tr');
+                const timestamp = new Date(item.timestamp).toLocaleString();
+
+                row.innerHTML = `
+                    <td>${timestamp}</td>
+                    <td>${item.user || 'System'}</td>
+                    <td>${item.action || '-'}</td>
+                    <td>${item.entity || '-'}</td>
+                    <td>${item.details || '-'}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            // Pagination
+            const paginationEl = document.getElementById('auditPagination');
+            paginationEl.innerHTML = '';
+            if (page > 1) {
+                const prevBtn = document.createElement('button');
+                prevBtn.textContent = 'Previous';
+                prevBtn.onclick = () => loadAuditLog(page - 1);
+                paginationEl.appendChild(prevBtn);
+            }
+            const nextBtn = document.createElement('button');
+            nextBtn.textContent = 'Next';
+            nextBtn.onclick = () => loadAuditLog(page + 1);
+            paginationEl.appendChild(nextBtn);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* NOTIFICATIONS */
+        /* ═══════════════════════════════════════════════════════════════ */
+
+        function toast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+
+            setTimeout(() => toast.remove(), 4000);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* STARTUP */
+        /* ═══════════════════════════════════════════════════════════════ */
+
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>

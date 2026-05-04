@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VA Certification Dashboard - ClawBot v0.1</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        .badge-certified {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+        .badge-pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        .badge-flagged {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        .badge-amendment {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+        .course-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .course-table th {
+            background-color: #f3f4f6;
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.875rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .course-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .course-table tr:hover {
+            background-color: #f9fafb;
+        }
+        .checkmark {
+            color: #16a34a;
+            font-weight: bold;
+        }
+        .xmark {
+            color: #dc2626;
+            font-weight: bold;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 0.5rem;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .delta-old {
+            background-color: #fee2e2;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+        }
+        .delta-new {
+            background-color: #dcfce7;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script id="embedded-data" type="application/json">{"dashboard": {"total_students": 6, "certified": 3, "pending_review": 2, "amendment_pending": 1}, "students": [{"id": "SID-001", "name": "Daniel Bahena", "program": "B.A. Journalism", "chapter": "33", "institution": "SDSU", "status": "certified", "certifiable_units": 12.0, "residential_units": 12.0, "distance_units": 0, "training_time": "full_time", "sco_queue_count": 0, "dt_output": {"weams_matched": true, "weams_program": "BA JOURNALISM", "total_enrolled_units": 12.0, "total_certifiable_units": 12.0, "residential_units": 12.0, "distance_units": 0, "training_time": "full_time", "rate_of_pursuit": 1.0, "courses": [{"course_id": "JOUR 301", "title": "Reporting and Writing", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "JOUR 350", "title": "Digital Media Production", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "JOUR 400", "title": "Ethics in Journalism", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "COMM 200", "title": "Communication Theory", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}], "sco_queue_items": []}, "em_enrollment": {"status": "ready", "confidence_score": 1.0, "training_time": "Full-time", "rate_of_pursuit": 1.0, "resident_credits": 12.0, "distance_credits": 0}, "hitl_flags": []}, {"id": "SID-003", "name": "James Chen", "program": "M.C.P. City Planning", "chapter": "33", "institution": "SDSU", "status": "certified", "certifiable_units": 9.0, "residential_units": 6.0, "distance_units": 3.0, "training_time": "full_time", "sco_queue_count": 0, "dt_output": {"weams_matched": true, "weams_program": "MCP CITY PLANNING", "total_enrolled_units": 9.0, "total_certifiable_units": 9.0, "residential_units": 6.0, "distance_units": 3.0, "training_time": "full_time", "rate_of_pursuit": 1.0, "courses": [{"course_id": "CP 501", "title": "Urban Planning Theory", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "CP 520", "title": "Planning Methods", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "CP 799A", "title": "Thesis", "units": 3.0, "certifiable": true, "modality": "distance", "exclusion_reason": null, "exclusion_detail": "", "flags": []}], "sco_queue_items": []}, "em_enrollment": {"status": "ready", "confidence_score": 1.0, "training_time": "Full-time", "rate_of_pursuit": 1.0, "resident_credits": 6.0, "distance_credits": 3.0}, "hitl_flags": []}, {"id": "SID-006", "name": "Lisa Nguyen", "program": "M.A. Comparative World Literature", "chapter": "33", "institution": "CSUN", "status": "pending_review", "certifiable_units": 9.0, "residential_units": 6.0, "distance_units": 3.0, "training_time": "full_time", "sco_queue_count": 0, "dt_output": {"weams_matched": true, "weams_program": "MA ENGLISH-LITERATURE", "total_enrolled_units": 9.0, "total_certifiable_units": 9.0, "residential_units": 6.0, "distance_units": 3.0, "training_time": "full_time", "rate_of_pursuit": 1.0, "courses": [{"course_id": "ENG 501", "title": "American Literature Seminar", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "ENG 520", "title": "Literary Theory", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "ENG 540", "title": "British Literature Research", "units": 3.0, "certifiable": true, "modality": "distance", "exclusion_reason": null, "exclusion_detail": "", "flags": []}], "sco_queue_items": []}, "em_enrollment": {"status": "draft", "confidence_score": 0.85, "training_time": "Full-time", "rate_of_pursuit": 1.0, "resident_credits": 6.0, "distance_credits": 3.0}, "hitl_flags": [{"code": "WEAMS crosswalk confidence below 95%", "description": "WEAMS crosswalk confidence below 95%"}, {"code": "Confidence score below 90%", "description": "Confidence score below 90%"}]}, {"id": "SID-002", "name": "Maria Garcia", "program": "B.S. Computer Science", "chapter": "35", "institution": "SDSU", "status": "pending_review", "certifiable_units": 7.0, "residential_units": 7.0, "distance_units": 0, "training_time": "half_time", "sco_queue_count": 1, "dt_output": {"weams_matched": true, "weams_program": "BS COMPUTER SCIENCE", "total_enrolled_units": 13.0, "total_certifiable_units": 7.0, "residential_units": 7.0, "distance_units": 0, "training_time": "half_time", "rate_of_pursuit": 0.5833333333333334, "courses": [{"course_id": "CS 301", "title": "Data Structures", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "CS 310", "title": "Database Systems", "units": 4.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "MATH 150", "title": "Calculus Review (Audit)", "units": 0.0, "certifiable": false, "modality": null, "exclusion_reason": "Course not required for degree per DARS", "exclusion_detail": "Course not required for B.S. Computer Science per DARS. No SCO exception on file.", "flags": []}, {"course_id": "CS 250", "title": "Intro to Programming (repeat)", "units": 3.0, "certifiable": false, "modality": null, "exclusion_reason": "Repeat of previously passed course \u2014 SCO review required", "exclusion_detail": "Previously passed. No qualifying repeat exception. Routed to SCO for review.", "flags": ["SCO review: verify if repeat exception applies"]}, {"course_id": "PHIL 332", "title": "Ethics in Technology (substitution)", "units": 3.0, "certifiable": false, "modality": null, "exclusion_reason": "Routed to SCO exception queue", "exclusion_detail": "Not in DARS. SCO exception (course_substitution) requires manual review.", "flags": ["SCO exception: course_substitution"]}], "sco_queue_items": [{"course_id": "PHIL 332", "title": "Ethics in Technology (substitution)", "units": 3.0, "exclusion_reason": "Routed to SCO exception queue", "exclusion_detail": "Not in DARS. SCO exception (course_substitution) requires manual review.", "flags": ["SCO exception: course_substitution"]}]}, "em_enrollment": {"status": "draft", "confidence_score": 0.9, "training_time": "Half-time", "rate_of_pursuit": 0.5833333333333334, "resident_credits": 7.0, "distance_credits": 0}, "hitl_flags": [{"code": "Courses in SCO exception queue", "description": "Courses in SCO exception queue"}]}, {"id": "SID-005", "name": "Robert Torres", "program": "B.S. Civil Engineering", "chapter": "31", "institution": "CSUN", "status": "amendment_pending", "certifiable_units": 10.0, "residential_units": 10.0, "distance_units": 0, "training_time": "three_quarter", "sco_queue_count": 0, "dt_output": {"weams_matched": true, "weams_program": "BS CIVIL ENGINEERING", "total_enrolled_units": 10.0, "total_certifiable_units": 10.0, "residential_units": 10.0, "distance_units": 0, "training_time": "three_quarter", "rate_of_pursuit": 0.8333333333333334, "courses": [{"course_id": "CE 310", "title": "Structural Analysis", "units": 4.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "CE 330", "title": "Hydraulics and Water Resources", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "CE 410", "title": "Transportation Engineering", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}], "sco_queue_items": []}, "em_enrollment": {"status": "ready", "confidence_score": 1.0, "training_time": "Three-quarter time", "rate_of_pursuit": 0.8333333333333334, "resident_credits": 10.0, "distance_credits": 0}, "hitl_flags": []}, {"id": "SID-004", "name": "Sarah Kim", "program": "B.A. Psychology", "chapter": "33", "institution": "CSUN", "status": "certified", "certifiable_units": 10.0, "residential_units": 10.0, "distance_units": 0, "training_time": "three_quarter", "sco_queue_count": 0, "dt_output": {"weams_matched": true, "weams_program": "BA PSYCHOLOGY", "total_enrolled_units": 10.0, "total_certifiable_units": 10.0, "residential_units": 10.0, "distance_units": 0, "training_time": "three_quarter", "rate_of_pursuit": 0.8333333333333334, "courses": [{"course_id": "PSY 310", "title": "Developmental Psychology", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "PSY 380", "title": "Research Methods", "units": 4.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "PSY 450", "title": "Abnormal Psychology", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}], "sco_queue_items": []}, "em_enrollment": {"status": "ready", "confidence_score": 1.0, "training_time": "Three-quarter time", "rate_of_pursuit": 0.8333333333333334, "resident_credits": 10.0, "distance_credits": 0}, "hitl_flags": []}], "amendments": [{"id": "AMD-001", "student_id": "SID-005", "student_name": "Robert Torres", "change_type": "course_dropped", "reason": "Pre-registered but reduced", "status": "pending", "delta": {"original_enrolled_units": 10.0, "revised_enrolled_units": 7.0, "original_certifiable_units": 10.0, "revised_certifiable_units": 7.0, "original_residential": 10.0, "revised_residential": 7.0, "original_distance": 0, "revised_distance": 0, "original_training_time": "three_quarter", "revised_training_time": "half_time", "original_rate_of_pursuit": 0.8333333333333334, "revised_rate_of_pursuit": 0.5833333333333334, "changed_course_id": "CE 410"}, "created_at": "2026-04-10T02:15:24.790286"}], "student_details": {"SID-001": {"id": "SID-001", "name": "Daniel Bahena", "program": "B.A. Journalism", "chapter": "33", "institution": "SDSU", "status": "certified", "certifiable_units": 12.0, "residential_units": 12.0, "distance_units": 0, "training_time": "full_time", "sco_queue_count": 0, "dt_output": {"weams_matched": true, "weams_program": "BA JOURNALISM", "total_enrolled_units": 12.0, "total_certifiable_units": 12.0, "residential_units": 12.0, "distance_units": 0, "training_time": "full_time", "rate_of_pursuit": 1.0, "courses": [{"course_id": "JOUR 301", "title": "Reporting and Writing", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "JOUR 350", "title": "Digital Media Production", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "JOUR 400", "title": "Ethics in Journalism", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "COMM 200", "title": "Communication Theory", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}], "sco_queue_items": []}, "em_enrollment": {"status": "ready", "confidence_score": 1.0, "training_time": "Full-time", "rate_of_pursuit": 1.0, "resident_credits": 12.0, "distance_credits": 0}, "hitl_flags": []}, "SID-003": {"id": "SID-003", "name": "James Chen", "program": "M.C.P. City Planning", "chapter": "33", "institution": "SDSU", "status": "certified", "certifiable_units": 9.0, "residential_units": 6.0, "distance_units": 3.0, "training_time": "full_time", "sco_queue_count": 0, "dt_output": {"weams_matched": true, "weams_program": "MCP CITY PLANNING", "total_enrolled_units": 9.0, "total_certifiable_units": 9.0, "residential_units": 6.0, "distance_units": 3.0, "training_time": "full_time", "rate_of_pursuit": 1.0, "courses": [{"course_id": "CP 501", "title": "Urban Planning Theory", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "CP 520", "title": "Planning Methods", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "CP 799A", "title": "Thesis", "units": 3.0, "certifiable": true, "modality": "distance", "exclusion_reason": null, "exclusion_detail": "", "flags": []}], "sco_queue_items": []}, "em_enrollment": {"status": "ready", "confidence_score": 1.0, "training_time": "Full-time", "rate_of_pursuit": 1.0, "resident_credits": 6.0, "distance_credits": 3.0}, "hitl_flags": []}, "SID-006": {"id": "SID-006", "name": "Lisa Nguyen", "program": "M.A. Comparative World Literature", "chapter": "33", "institution": "CSUN", "status": "pending_review", "certifiable_units": 9.0, "residential_units": 6.0, "distance_units": 3.0, "training_time": "full_time", "sco_queue_count": 0, "dt_output": {"weams_matched": true, "weams_program": "MA ENGLISH-LITERATURE", "total_enrolled_units": 9.0, "total_certifiable_units": 9.0, "residential_units": 6.0, "distance_units": 3.0, "training_time": "full_time", "rate_of_pursuit": 1.0, "courses": [{"course_id": "ENG 501", "title": "American Literature Seminar", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "ENG 520", "title": "Literary Theory", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "ENG 540", "title": "British Literature Research", "units": 3.0, "certifiable": true, "modality": "distance", "exclusion_reason": null, "exclusion_detail": "", "flags": []}], "sco_queue_items": []}, "em_enrollment": {"status": "draft", "confidence_score": 0.85, "training_time": "Full-time", "rate_of_pursuit": 1.0, "resident_credits": 6.0, "distance_credits": 3.0}, "hitl_flags": [{"code": "WEAMS crosswalk confidence below 95%", "description": "WEAMS crosswalk confidence below 95%"}, {"code": "Confidence score below 90%", "description": "Confidence score below 90%"}]}, "SID-002": {"id": "SID-002", "name": "Maria Garcia", "program": "B.S. Computer Science", "chapter": "35", "institution": "SDSU", "status": "pending_review", "certifiable_units": 7.0, "residential_units": 7.0, "distance_units": 0, "training_time": "half_time", "sco_queue_count": 1, "dt_output": {"weams_matched": true, "weams_program": "BS COMPUTER SCIENCE", "total_enrolled_units": 13.0, "total_certifiable_units": 7.0, "residential_units": 7.0, "distance_units": 0, "training_time": "half_time", "rate_of_pursuit": 0.5833333333333334, "courses": [{"course_id": "CS 301", "title": "Data Structures", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "CS 310", "title": "Database Systems", "units": 4.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "MATH 150", "title": "Calculus Review (Audit)", "units": 0.0, "certifiable": false, "modality": null, "exclusion_reason": "Course not required for degree per DARS", "exclusion_detail": "Course not required for B.S. Computer Science per DARS. No SCO exception on file.", "flags": []}, {"course_id": "CS 250", "title": "Intro to Programming (repeat)", "units": 3.0, "certifiable": false, "modality": null, "exclusion_reason": "Repeat of previously passed course \u2014 SCO review required", "exclusion_detail": "Previously passed. No qualifying repeat exception. Routed to SCO for review.", "flags": ["SCO review: verify if repeat exception applies"]}, {"course_id": "PHIL 332", "title": "Ethics in Technology (substitution)", "units": 3.0, "certifiable": false, "modality": null, "exclusion_reason": "Routed to SCO exception queue", "exclusion_detail": "Not in DARS. SCO exception (course_substitution) requires manual review.", "flags": ["SCO exception: course_substitution"]}], "sco_queue_items": [{"course_id": "PHIL 332", "title": "Ethics in Technology (substitution)", "units": 3.0, "exclusion_reason": "Routed to SCO exception queue", "exclusion_detail": "Not in DARS. SCO exception (course_substitution) requires manual review.", "flags": ["SCO exception: course_substitution"]}]}, "em_enrollment": {"status": "draft", "confidence_score": 0.9, "training_time": "Half-time", "rate_of_pursuit": 0.5833333333333334, "resident_credits": 7.0, "distance_credits": 0}, "hitl_flags": [{"code": "Courses in SCO exception queue", "description": "Courses in SCO exception queue"}]}, "SID-005": {"id": "SID-005", "name": "Robert Torres", "program": "B.S. Civil Engineering", "chapter": "31", "institution": "CSUN", "status": "amendment_pending", "certifiable_units": 10.0, "residential_units": 10.0, "distance_units": 0, "training_time": "three_quarter", "sco_queue_count": 0, "dt_output": {"weams_matched": true, "weams_program": "BS CIVIL ENGINEERING", "total_enrolled_units": 10.0, "total_certifiable_units": 10.0, "residential_units": 10.0, "distance_units": 0, "training_time": "three_quarter", "rate_of_pursuit": 0.8333333333333334, "courses": [{"course_id": "CE 310", "title": "Structural Analysis", "units": 4.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "CE 330", "title": "Hydraulics and Water Resources", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "CE 410", "title": "Transportation Engineering", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}], "sco_queue_items": []}, "em_enrollment": {"status": "ready", "confidence_score": 1.0, "training_time": "Three-quarter time", "rate_of_pursuit": 0.8333333333333334, "resident_credits": 10.0, "distance_credits": 0}, "hitl_flags": []}, "SID-004": {"id": "SID-004", "name": "Sarah Kim", "program": "B.A. Psychology", "chapter": "33", "institution": "CSUN", "status": "certified", "certifiable_units": 10.0, "residential_units": 10.0, "distance_units": 0, "training_time": "three_quarter", "sco_queue_count": 0, "dt_output": {"weams_matched": true, "weams_program": "BA PSYCHOLOGY", "total_enrolled_units": 10.0, "total_certifiable_units": 10.0, "residential_units": 10.0, "distance_units": 0, "training_time": "three_quarter", "rate_of_pursuit": 0.8333333333333334, "courses": [{"course_id": "PSY 310", "title": "Developmental Psychology", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "PSY 380", "title": "Research Methods", "units": 4.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "PSY 450", "title": "Abnormal Psychology", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}], "sco_queue_items": []}, "em_enrollment": {"status": "ready", "confidence_score": 1.0, "training_time": "Three-quarter time", "rate_of_pursuit": 0.8333333333333334, "resident_credits": 10.0, "distance_credits": 0}, "hitl_flags": []}}}</script>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // --- Data layer: embedded JSON or live API ---
+        const _rawEmbed = document.getElementById("embedded-data").textContent.trim();
+        const EMBEDDED = _rawEmbed !== "{"dashboard": {"total_students": 6, "certified": 3, "pending_review": 2, "amendment_pending": 1}, "students": [{"id": "SID-001", "name": "Daniel Bahena", "program": "B.A. Journalism", "chapter": "33", "institution": "SDSU", "status": "certified", "certifiable_units": 12.0, "residential_units": 12.0, "distance_units": 0, "training_time": "full_time", "sco_queue_count": 0, "dt_output": {"weams_matched": true, "weams_program": "BA JOURNALISM", "total_enrolled_units": 12.0, "total_certifiable_units": 12.0, "residential_units": 12.0, "distance_units": 0, "training_time": "full_time", "rate_of_pursuit": 1.0, "courses": [{"course_id": "JOUR 301", "title": "Reporting and Writing", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "JOUR 350", "title": "Digital Media Production", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "JOUR 400", "title": "Ethics in Journalism", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "COMM 200", "title": "Communication Theory", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}], "sco_queue_items": []}, "em_enrollment": {"status": "ready", "confidence_score": 1.0, "training_time": "Full-time", "rate_of_pursuit": 1.0, "resident_credits": 12.0, "distance_credits": 0}, "hitl_flags": []}, {"id": "SID-003", "name": "James Chen", "program": "M.C.P. City Planning", "chapter": "33", "institution": "SDSU", "status": "certified", "certifiable_units": 9.0, "residential_units": 6.0, "distance_units": 3.0, "training_time": "full_time", "sco_queue_count": 0, "dt_output": {"weams_matched": true, "weams_program": "MCP CITY PLANNING", "total_enrolled_units": 9.0, "total_certifiable_units": 9.0, "residential_units": 6.0, "distance_units": 3.0, "training_time": "full_time", "rate_of_pursuit": 1.0, "courses": [{"course_id": "CP 501", "title": "Urban Planning Theory", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "CP 520", "title": "Planning Methods", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "CP 799A", "title": "Thesis", "units": 3.0, "certifiable": true, "modality": "distance", "exclusion_reason": null, "exclusion_detail": "", "flags": []}], "sco_queue_items": []}, "em_enrollment": {"status": "ready", "confidence_score": 1.0, "training_time": "Full-time", "rate_of_pursuit": 1.0, "resident_credits": 6.0, "distance_credits": 3.0}, "hitl_flags": []}, {"id": "SID-006", "name": "Lisa Nguyen", "program": "M.A. Comparative World Literature", "chapter": "33", "institution": "CSUN", "status": "pending_review", "certifiable_units": 9.0, "residential_units": 6.0, "distance_units": 3.0, "training_time": "full_time", "sco_queue_count": 0, "dt_output": {"weams_matched": true, "weams_program": "MA ENGLISH-LITERATURE", "total_enrolled_units": 9.0, "total_certifiable_units": 9.0, "residential_units": 6.0, "distance_units": 3.0, "training_time": "full_time", "rate_of_pursuit": 1.0, "courses": [{"course_id": "ENG 501", "title": "American Literature Seminar", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "ENG 520", "title": "Literary Theory", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "ENG 540", "title": "British Literature Research", "units": 3.0, "certifiable": true, "modality": "distance", "exclusion_reason": null, "exclusion_detail": "", "flags": []}], "sco_queue_items": []}, "em_enrollment": {"status": "draft", "confidence_score": 0.85, "training_time": "Full-time", "rate_of_pursuit": 1.0, "resident_credits": 6.0, "distance_credits": 3.0}, "hitl_flags": [{"code": "WEAMS crosswalk confidence below 95%", "description": "WEAMS crosswalk confidence below 95%"}, {"code": "Confidence score below 90%", "description": "Confidence score below 90%"}]}, {"id": "SID-002", "name": "Maria Garcia", "program": "B.S. Computer Science", "chapter": "35", "institution": "SDSU", "status": "pending_review", "certifiable_units": 7.0, "residential_units": 7.0, "distance_units": 0, "training_time": "half_time", "sco_queue_count": 1, "dt_output": {"weams_matched": true, "weams_program": "BS COMPUTER SCIENCE", "total_enrolled_units": 13.0, "total_certifiable_units": 7.0, "residential_units": 7.0, "distance_units": 0, "training_time": "half_time", "rate_of_pursuit": 0.5833333333333334, "courses": [{"course_id": "CS 301", "title": "Data Structures", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "CS 310", "title": "Database Systems", "units": 4.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "MATH 150", "title": "Calculus Review (Audit)", "units": 0.0, "certifiable": false, "modality": null, "exclusion_reason": "Course not required for degree per DARS", "exclusion_detail": "Course not required for B.S. Computer Science per DARS. No SCO exception on file.", "flags": []}, {"course_id": "CS 250", "title": "Intro to Programming (repeat)", "units": 3.0, "certifiable": false, "modality": null, "exclusion_reason": "Repeat of previously passed course \u2014 SCO review required", "exclusion_detail": "Previously passed. No qualifying repeat exception. Routed to SCO for review.", "flags": ["SCO review: verify if repeat exception applies"]}, {"course_id": "PHIL 332", "title": "Ethics in Technology (substitution)", "units": 3.0, "certifiable": false, "modality": null, "exclusion_reason": "Routed to SCO exception queue", "exclusion_detail": "Not in DARS. SCO exception (course_substitution) requires manual review.", "flags": ["SCO exception: course_substitution"]}], "sco_queue_items": [{"course_id": "PHIL 332", "title": "Ethics in Technology (substitution)", "units": 3.0, "exclusion_reason": "Routed to SCO exception queue", "exclusion_detail": "Not in DARS. SCO exception (course_substitution) requires manual review.", "flags": ["SCO exception: course_substitution"]}]}, "em_enrollment": {"status": "draft", "confidence_score": 0.9, "training_time": "Half-time", "rate_of_pursuit": 0.5833333333333334, "resident_credits": 7.0, "distance_credits": 0}, "hitl_flags": [{"code": "Courses in SCO exception queue", "description": "Courses in SCO exception queue"}]}, {"id": "SID-005", "name": "Robert Torres", "program": "B.S. Civil Engineering", "chapter": "31", "institution": "CSUN", "status": "amendment_pending", "certifiable_units": 10.0, "residential_units": 10.0, "distance_units": 0, "training_time": "three_quarter", "sco_queue_count": 0, "dt_output": {"weams_matched": true, "weams_program": "BS CIVIL ENGINEERING", "total_enrolled_units": 10.0, "total_certifiable_units": 10.0, "residential_units": 10.0, "distance_units": 0, "training_time": "three_quarter", "rate_of_pursuit": 0.8333333333333334, "courses": [{"course_id": "CE 310", "title": "Structural Analysis", "units": 4.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "CE 330", "title": "Hydraulics and Water Resources", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "CE 410", "title": "Transportation Engineering", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}], "sco_queue_items": []}, "em_enrollment": {"status": "ready", "confidence_score": 1.0, "training_time": "Three-quarter time", "rate_of_pursuit": 0.8333333333333334, "resident_credits": 10.0, "distance_credits": 0}, "hitl_flags": []}, {"id": "SID-004", "name": "Sarah Kim", "program": "B.A. Psychology", "chapter": "33", "institution": "CSUN", "status": "certified", "certifiable_units": 10.0, "residential_units": 10.0, "distance_units": 0, "training_time": "three_quarter", "sco_queue_count": 0, "dt_output": {"weams_matched": true, "weams_program": "BA PSYCHOLOGY", "total_enrolled_units": 10.0, "total_certifiable_units": 10.0, "residential_units": 10.0, "distance_units": 0, "training_time": "three_quarter", "rate_of_pursuit": 0.8333333333333334, "courses": [{"course_id": "PSY 310", "title": "Developmental Psychology", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "PSY 380", "title": "Research Methods", "units": 4.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "PSY 450", "title": "Abnormal Psychology", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}], "sco_queue_items": []}, "em_enrollment": {"status": "ready", "confidence_score": 1.0, "training_time": "Three-quarter time", "rate_of_pursuit": 0.8333333333333334, "resident_credits": 10.0, "distance_credits": 0}, "hitl_flags": []}], "amendments": [{"id": "AMD-001", "student_id": "SID-005", "student_name": "Robert Torres", "change_type": "course_dropped", "reason": "Pre-registered but reduced", "status": "pending", "delta": {"original_enrolled_units": 10.0, "revised_enrolled_units": 7.0, "original_certifiable_units": 10.0, "revised_certifiable_units": 7.0, "original_residential": 10.0, "revised_residential": 7.0, "original_distance": 0, "revised_distance": 0, "original_training_time": "three_quarter", "revised_training_time": "half_time", "original_rate_of_pursuit": 0.8333333333333334, "revised_rate_of_pursuit": 0.5833333333333334, "changed_course_id": "CE 410"}, "created_at": "2026-04-10T02:15:24.790286"}], "student_details": {"SID-001": {"id": "SID-001", "name": "Daniel Bahena", "program": "B.A. Journalism", "chapter": "33", "institution": "SDSU", "status": "certified", "certifiable_units": 12.0, "residential_units": 12.0, "distance_units": 0, "training_time": "full_time", "sco_queue_count": 0, "dt_output": {"weams_matched": true, "weams_program": "BA JOURNALISM", "total_enrolled_units": 12.0, "total_certifiable_units": 12.0, "residential_units": 12.0, "distance_units": 0, "training_time": "full_time", "rate_of_pursuit": 1.0, "courses": [{"course_id": "JOUR 301", "title": "Reporting and Writing", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "JOUR 350", "title": "Digital Media Production", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "JOUR 400", "title": "Ethics in Journalism", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "COMM 200", "title": "Communication Theory", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}], "sco_queue_items": []}, "em_enrollment": {"status": "ready", "confidence_score": 1.0, "training_time": "Full-time", "rate_of_pursuit": 1.0, "resident_credits": 12.0, "distance_credits": 0}, "hitl_flags": []}, "SID-003": {"id": "SID-003", "name": "James Chen", "program": "M.C.P. City Planning", "chapter": "33", "institution": "SDSU", "status": "certified", "certifiable_units": 9.0, "residential_units": 6.0, "distance_units": 3.0, "training_time": "full_time", "sco_queue_count": 0, "dt_output": {"weams_matched": true, "weams_program": "MCP CITY PLANNING", "total_enrolled_units": 9.0, "total_certifiable_units": 9.0, "residential_units": 6.0, "distance_units": 3.0, "training_time": "full_time", "rate_of_pursuit": 1.0, "courses": [{"course_id": "CP 501", "title": "Urban Planning Theory", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "CP 520", "title": "Planning Methods", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "CP 799A", "title": "Thesis", "units": 3.0, "certifiable": true, "modality": "distance", "exclusion_reason": null, "exclusion_detail": "", "flags": []}], "sco_queue_items": []}, "em_enrollment": {"status": "ready", "confidence_score": 1.0, "training_time": "Full-time", "rate_of_pursuit": 1.0, "resident_credits": 6.0, "distance_credits": 3.0}, "hitl_flags": []}, "SID-006": {"id": "SID-006", "name": "Lisa Nguyen", "program": "M.A. Comparative World Literature", "chapter": "33", "institution": "CSUN", "status": "pending_review", "certifiable_units": 9.0, "residential_units": 6.0, "distance_units": 3.0, "training_time": "full_time", "sco_queue_count": 0, "dt_output": {"weams_matched": true, "weams_program": "MA ENGLISH-LITERATURE", "total_enrolled_units": 9.0, "total_certifiable_units": 9.0, "residential_units": 6.0, "distance_units": 3.0, "training_time": "full_time", "rate_of_pursuit": 1.0, "courses": [{"course_id": "ENG 501", "title": "American Literature Seminar", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "ENG 520", "title": "Literary Theory", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "ENG 540", "title": "British Literature Research", "units": 3.0, "certifiable": true, "modality": "distance", "exclusion_reason": null, "exclusion_detail": "", "flags": []}], "sco_queue_items": []}, "em_enrollment": {"status": "draft", "confidence_score": 0.85, "training_time": "Full-time", "rate_of_pursuit": 1.0, "resident_credits": 6.0, "distance_credits": 3.0}, "hitl_flags": [{"code": "WEAMS crosswalk confidence below 95%", "description": "WEAMS crosswalk confidence below 95%"}, {"code": "Confidence score below 90%", "description": "Confidence score below 90%"}]}, "SID-002": {"id": "SID-002", "name": "Maria Garcia", "program": "B.S. Computer Science", "chapter": "35", "institution": "SDSU", "status": "pending_review", "certifiable_units": 7.0, "residential_units": 7.0, "distance_units": 0, "training_time": "half_time", "sco_queue_count": 1, "dt_output": {"weams_matched": true, "weams_program": "BS COMPUTER SCIENCE", "total_enrolled_units": 13.0, "total_certifiable_units": 7.0, "residential_units": 7.0, "distance_units": 0, "training_time": "half_time", "rate_of_pursuit": 0.5833333333333334, "courses": [{"course_id": "CS 301", "title": "Data Structures", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "CS 310", "title": "Database Systems", "units": 4.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "MATH 150", "title": "Calculus Review (Audit)", "units": 0.0, "certifiable": false, "modality": null, "exclusion_reason": "Course not required for degree per DARS", "exclusion_detail": "Course not required for B.S. Computer Science per DARS. No SCO exception on file.", "flags": []}, {"course_id": "CS 250", "title": "Intro to Programming (repeat)", "units": 3.0, "certifiable": false, "modality": null, "exclusion_reason": "Repeat of previously passed course \u2014 SCO review required", "exclusion_detail": "Previously passed. No qualifying repeat exception. Routed to SCO for review.", "flags": ["SCO review: verify if repeat exception applies"]}, {"course_id": "PHIL 332", "title": "Ethics in Technology (substitution)", "units": 3.0, "certifiable": false, "modality": null, "exclusion_reason": "Routed to SCO exception queue", "exclusion_detail": "Not in DARS. SCO exception (course_substitution) requires manual review.", "flags": ["SCO exception: course_substitution"]}], "sco_queue_items": [{"course_id": "PHIL 332", "title": "Ethics in Technology (substitution)", "units": 3.0, "exclusion_reason": "Routed to SCO exception queue", "exclusion_detail": "Not in DARS. SCO exception (course_substitution) requires manual review.", "flags": ["SCO exception: course_substitution"]}]}, "em_enrollment": {"status": "draft", "confidence_score": 0.9, "training_time": "Half-time", "rate_of_pursuit": 0.5833333333333334, "resident_credits": 7.0, "distance_credits": 0}, "hitl_flags": [{"code": "Courses in SCO exception queue", "description": "Courses in SCO exception queue"}]}, "SID-005": {"id": "SID-005", "name": "Robert Torres", "program": "B.S. Civil Engineering", "chapter": "31", "institution": "CSUN", "status": "amendment_pending", "certifiable_units": 10.0, "residential_units": 10.0, "distance_units": 0, "training_time": "three_quarter", "sco_queue_count": 0, "dt_output": {"weams_matched": true, "weams_program": "BS CIVIL ENGINEERING", "total_enrolled_units": 10.0, "total_certifiable_units": 10.0, "residential_units": 10.0, "distance_units": 0, "training_time": "three_quarter", "rate_of_pursuit": 0.8333333333333334, "courses": [{"course_id": "CE 310", "title": "Structural Analysis", "units": 4.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "CE 330", "title": "Hydraulics and Water Resources", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "CE 410", "title": "Transportation Engineering", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}], "sco_queue_items": []}, "em_enrollment": {"status": "ready", "confidence_score": 1.0, "training_time": "Three-quarter time", "rate_of_pursuit": 0.8333333333333334, "resident_credits": 10.0, "distance_credits": 0}, "hitl_flags": []}, "SID-004": {"id": "SID-004", "name": "Sarah Kim", "program": "B.A. Psychology", "chapter": "33", "institution": "CSUN", "status": "certified", "certifiable_units": 10.0, "residential_units": 10.0, "distance_units": 0, "training_time": "three_quarter", "sco_queue_count": 0, "dt_output": {"weams_matched": true, "weams_program": "BA PSYCHOLOGY", "total_enrolled_units": 10.0, "total_certifiable_units": 10.0, "residential_units": 10.0, "distance_units": 0, "training_time": "three_quarter", "rate_of_pursuit": 0.8333333333333334, "courses": [{"course_id": "PSY 310", "title": "Developmental Psychology", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "PSY 380", "title": "Research Methods", "units": 4.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}, {"course_id": "PSY 450", "title": "Abnormal Psychology", "units": 3.0, "certifiable": true, "modality": "residential", "exclusion_reason": null, "exclusion_detail": "", "flags": []}], "sco_queue_items": []}, "em_enrollment": {"status": "ready", "confidence_score": 1.0, "training_time": "Three-quarter time", "rate_of_pursuit": 0.8333333333333334, "resident_credits": 10.0, "distance_credits": 0}, "hitl_flags": []}}}" ? JSON.parse(_rawEmbed) : null;
+        const USE_API = !EMBEDDED;
+
+        function Dashboard() {
+            const [activeTab, setActiveTab] = useState("queue");
+            const [dashboardStats, setDashboardStats] = useState(EMBEDDED ? EMBEDDED.dashboard : null);
+            const [students, setStudents] = useState(EMBEDDED ? EMBEDDED.students : []);
+            const [selectedStudent, setSelectedStudent] = useState(null);
+            const [amendments, setAmendments] = useState(EMBEDDED ? EMBEDDED.amendments : []);
+            const [auditLog, setAuditLog] = useState(EMBEDDED ? [{timestamp: new Date().toISOString(), action: "app_startup", message: "Dashboard loaded with embedded demo data"}] : []);
+            const [institution, setInstitution] = useState("SDSU");
+
+            useEffect(() => {
+                if (!USE_API) return;
+                fetchData();
+                const interval = setInterval(fetchData, 5000);
+                return () => clearInterval(interval);
+            }, []);
+
+            const fetchData = async () => {
+                if (!USE_API) return;
+                try {
+                    const [statsRes, studentsRes, amendmentsRes, logRes] = await Promise.all([
+                        fetch("/api/dashboard"),
+                        fetch("/api/students"),
+                        fetch("/api/amendments"),
+                        fetch("/api/audit-log"),
+                    ]);
+
+                    if (statsRes.ok) setDashboardStats(await statsRes.json());
+                    if (studentsRes.ok) setStudents(await studentsRes.json());
+                    if (amendmentsRes.ok) setAmendments(await amendmentsRes.json());
+                    if (logRes.ok) setAuditLog(await logRes.json());
+                } catch (err) {
+                    console.error("Error fetching data:", err);
+                }
+            };
+
+            const approveStudent = async (studentId) => {
+                if (USE_API) {
+                    try {
+                        const res = await fetch(`/api/students/${studentId}/approve`, { method: "POST" });
+                        if (res.ok) fetchData();
+                    } catch (err) { console.error(err); }
+                } else {
+                    // Embedded mode: update local state
+                    setStudents(prev => prev.map(s => s.id === studentId ? {...s, status: "certified"} : s));
+                    setDashboardStats(prev => ({...prev, certified: prev.certified + 1, pending_review: prev.pending_review - 1}));
+                    setAuditLog(prev => [{timestamp: new Date().toISOString(), action: "approve", student_name: students.find(s => s.id === studentId)?.name}, ...prev]);
+                }
+            };
+
+            const approveAmendment = async (amendmentId) => {
+                if (USE_API) {
+                    try {
+                        const res = await fetch(`/api/amendments/${amendmentId}/approve`, { method: "POST" });
+                        if (res.ok) fetchData();
+                    } catch (err) { console.error(err); }
+                } else {
+                    setAmendments(prev => prev.map(a => a.id === amendmentId ? {...a, status: "approved"} : a));
+                    setAuditLog(prev => [{timestamp: new Date().toISOString(), action: "approve_amendment", amendment_id: amendmentId}, ...prev]);
+                }
+            };
+
+            const certifyAll = async () => {
+                if (USE_API) {
+                    try {
+                        const res = await fetch("/api/students//certify-all", { method: "POST" });
+                        if (res.ok) fetchData();
+                    } catch (err) { console.error(err); }
+                } else {
+                    let count = 0;
+                    setStudents(prev => prev.map(s => {
+                        if ((s.status === "pending_review" || s.status === "amendment_pending") && !s.sco_queue_count) {
+                            count++;
+                            return {...s, status: "certified"};
+                        }
+                        return s;
+                    }));
+                    setDashboardStats(prev => ({...prev, certified: prev.certified + count, pending_review: Math.max(0, prev.pending_review - count)}));
+                    setAuditLog(prev => [{timestamp: new Date().toISOString(), action: "batch_certify", message: `${count} students certified`}, ...prev]);
+                }
+            };
+
+            const getStatusBadgeClass = (status) => {
+                switch (status) {
+                    case "certified":
+                        return "status-badge badge-certified";
+                    case "pending_review":
+                        return "status-badge badge-pending";
+                    case "amendment_pending":
+                        return "status-badge badge-amendment";
+                    default:
+                        return "status-badge badge-flagged";
+                }
+            };
+
+            const getStatusLabel = (status) => {
+                switch (status) {
+                    case "certified":
+                        return "Certified";
+                    case "pending_review":
+                        return "Pending Review";
+                    case "amendment_pending":
+                        return "Amendment Pending";
+                    default:
+                        return status;
+                }
+            };
+
+            const filteredStudents = students.filter((s) => s.institution === institution);
+            const queueStudents = filteredStudents.filter(
+                (s) => s.status === "pending_review" || s.status === "amendment_pending"
+            );
+
+            return (
+                <div className="bg-gray-50 min-h-screen">
+                    {/* Header */}
+                    <header className="bg-white shadow-sm border-b border-gray-200">
+                        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                                    <span className="text-white font-bold text-lg">C</span>
+                                </div>
+                                <div>
+                                    <h1 className="text-2xl font-bold text-gray-900">VA Certification Dashboard</h1>
+                                    <p className="text-sm text-gray-500">ClawBot v0.1 - SCO Review System</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-4">
+                                <label className="text-sm font-medium text-gray-700">
+                                    Institution:
+                                    <select
+                                        value={institution}
+                                        onChange={(e) => setInstitution(e.target.value)}
+                                        className="ml-2 px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    >
+                                        <option value="SDSU">SDSU (11910105)</option>
+                                        <option value="CSUN">CSUN (11918105)</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+                    </header>
+
+                    {/* Stats Bar */}
+                    {dashboardStats && (
+                        <div className="bg-white border-b border-gray-200">
+                            <div className="max-w-7xl mx-auto px-6 py-4">
+                                <div className="grid grid-cols-5 gap-4">
+                                    <div className="bg-gray-50 p-4 rounded-lg">
+                                        <div className="text-3xl font-bold text-gray-900">
+                                            {dashboardStats.total_students}
+                                        </div>
+                                        <p className="text-sm text-gray-600 mt-1">Total Students</p>
+                                    </div>
+                                    <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
+                                        <div className="text-3xl font-bold text-green-700">
+                                            {dashboardStats.certified}
+                                        </div>
+                                        <p className="text-sm text-green-600 mt-1">Certified</p>
+                                    </div>
+                                    <div className="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-500">
+                                        <div className="text-3xl font-bold text-yellow-700">
+                                            {dashboardStats.pending_review}
+                                        </div>
+                                        <p className="text-sm text-yellow-600 mt-1">Pending Review</p>
+                                    </div>
+                                    <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+                                        <div className="text-3xl font-bold text-blue-700">
+                                            {dashboardStats.amendment_pending}
+                                        </div>
+                                        <p className="text-sm text-blue-600 mt-1">Amendments</p>
+                                    </div>
+                                    <div className="bg-gray-50 p-4 rounded-lg">
+                                        <div className="text-sm font-mono text-gray-600">
+                                            {new Date(dashboardStats.timestamp).toLocaleTimeString()}
+                                        </div>
+                                        <p className="text-sm text-gray-500 mt-1">Last Updated</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Tabs */}
+                    <div className="max-w-7xl mx-auto px-6 mt-6">
+                        <div className="border-b border-gray-200 mb-6">
+                            <div className="flex gap-8">
+                                <button
+                                    onClick={() => setActiveTab("queue")}
+                                    className={`py-3 px-1 border-b-2 font-medium text-sm ${
+                                        activeTab === "queue"
+                                            ? "border-blue-600 text-blue-600"
+                                            : "border-transparent text-gray-500 hover:text-gray-700"
+                                    }`}
+                                >
+                                    Queue ({queueStudents.length})
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab("students")}
+                                    className={`py-3 px-1 border-b-2 font-medium text-sm ${
+                                        activeTab === "students"
+                                            ? "border-blue-600 text-blue-600"
+                                            : "border-transparent text-gray-500 hover:text-gray-700"
+                                    }`}
+                                >
+                                    All Students
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab("amendments")}
+                                    className={`py-3 px-1 border-b-2 font-medium text-sm ${
+                                        activeTab === "amendments"
+                                            ? "border-blue-600 text-blue-600"
+                                            : "border-transparent text-gray-500 hover:text-gray-700"
+                                    }`}
+                                >
+                                    Amendments ({amendments.length})
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab("audit")}
+                                    className={`py-3 px-1 border-b-2 font-medium text-sm ${
+                                        activeTab === "audit"
+                                            ? "border-blue-600 text-blue-600"
+                                            : "border-transparent text-gray-500 hover:text-gray-700"
+                                    }`}
+                                >
+                                    Audit Log
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Queue Tab */}
+                        {activeTab === "queue" && (
+                            <div className="space-y-4 pb-8">
+                                <div className="flex justify-between items-center mb-4">
+                                    <h2 className="text-lg font-semibold text-gray-900">
+                                        Students Needing Action ({queueStudents.length})
+                                    </h2>
+                                    {queueStudents.filter(s => !s.sco_queue_count).length > 0 && (
+                                        <button
+                                            onClick={certifyAll}
+                                            className="px-4 py-2 bg-green-600 text-white rounded-md text-sm font-medium hover:bg-green-700"
+                                        >
+                                            Batch Certify Clean
+                                        </button>
+                                    )}
+                                </div>
+                                {queueStudents.length === 0 ? (
+                                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
+                                        <p className="text-blue-700 font-medium">All students certified or amendments approved!</p>
+                                    </div>
+                                ) : (
+                                    queueStudents.map((student) => (
+                                        <div
+                                            key={student.id}
+                                            className="bg-white border border-yellow-300 rounded-lg p-6 hover:shadow-md transition"
+                                        >
+                                            <div className="flex justify-between items-start gap-4">
+                                                <div className="flex-1">
+                                                    <h3 className="text-lg font-semibold text-gray-900">{student.name}</h3>
+                                                    <p className="text-sm text-gray-600 mt-1">{student.program}</p>
+                                                    <div className="flex gap-4 mt-3 text-sm text-gray-600">
+                                                        <span>Chapter {student.chapter}</span>
+                                                        <span>{student.institution}</span>
+                                                        <span>{student.certifiable_units} cert. units</span>
+                                                    </div>
+                                                    {student.sco_queue_count > 0 && (
+                                                        <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded text-red-700 text-sm font-medium">
+                                                            {student.sco_queue_count} course(s) in SCO exception queue
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <div className="flex gap-2 flex-shrink-0">
+                                                    <button
+                                                        onClick={() => {
+                                                            if (USE_API) { fetch(`/api/students/${student.id}`).then(r => r.json()).then(setSelectedStudent); } else { setSelectedStudent(EMBEDDED.student_details[student.id]); }
+                                                        }}
+                                                        className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700"
+                                                    >
+                                                        Review
+                                                    </button>
+                                                    {!student.sco_queue_count && (
+                                                        <button
+                                                            onClick={() => approveStudent(student.id)}
+                                                            className="px-4 py-2 bg-green-600 text-white rounded-md text-sm font-medium hover:bg-green-700"
+                                                        >
+                                                            Approve
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        )}
+
+                        {/* All Students Tab */}
+                        {activeTab === "students" && (
+                            <div className="bg-white rounded-lg shadow overflow-hidden pb-8">
+                                <table className="course-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Program</th>
+                                            <th>Chapter</th>
+                                            <th>Institution</th>
+                                            <th>Status</th>
+                                            <th>Cert. Units</th>
+                                            <th>R / D</th>
+                                            <th>Training Time</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {filteredStudents.map((student) => (
+                                            <tr key={student.id}>
+                                                <td className="font-medium">{student.name}</td>
+                                                <td className="text-sm">{student.program}</td>
+                                                <td>{student.chapter}</td>
+                                                <td>{student.institution}</td>
+                                                <td>
+                                                    <span className={getStatusBadgeClass(student.status)}>
+                                                        {getStatusLabel(student.status)}
+                                                    </span>
+                                                </td>
+                                                <td className="text-right font-mono">{student.certifiable_units.toFixed(1)}</td>
+                                                <td className="text-right font-mono">
+                                                    {student.residential_units.toFixed(1)} / {student.distance_units.toFixed(1)}
+                                                </td>
+                                                <td className="text-sm">
+                                                    {student.training_time ? student.training_time.replace(/_/g, " ") : "-"}
+                                                </td>
+                                                <td>
+                                                    <button
+                                                        onClick={() => {
+                                                            if (USE_API) { fetch(`/api/students/${student.id}`).then(r => r.json()).then(setSelectedStudent); } else { setSelectedStudent(EMBEDDED.student_details[student.id]); }
+                                                        }}
+                                                        className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                                                    >
+                                                        Details
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+
+                        {/* Amendments Tab */}
+                        {activeTab === "amendments" && (
+                            <div className="space-y-4 pb-8">
+                                {amendments.length === 0 ? (
+                                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
+                                        <p className="text-blue-700 font-medium">No pending amendments</p>
+                                    </div>
+                                ) : (
+                                    amendments.map((amd) => (
+                                        <div key={amd.id} className="bg-white border border-blue-300 rounded-lg p-6">
+                                            <div className="flex justify-between items-start gap-4">
+                                                <div className="flex-1">
+                                                    <h3 className="text-lg font-semibold text-gray-900">{amd.student_name}</h3>
+                                                    <p className="text-sm text-gray-600 mt-1">{amd.reason}</p>
+                                                    <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
+                                                        <div>
+                                                            <p className="font-medium text-gray-700 mb-2">Before</p>
+                                                            <p className="text-gray-600">Units: {amd.delta.original_certifiable_units}</p>
+                                                            <p className="text-gray-600">Training: {amd.delta.original_training_time}</p>
+                                                        </div>
+                                                        <div>
+                                                            <p className="font-medium text-gray-700 mb-2">After</p>
+                                                            <p className="text-gray-600">Units: {amd.delta.revised_certifiable_units}</p>
+                                                            <p className="text-gray-600">Training: {amd.delta.revised_training_time}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {amd.status === "pending" && (
+                                                    <button
+                                                        onClick={() => approveAmendment(amd.id)}
+                                                        className="px-4 py-2 bg-green-600 text-white rounded-md text-sm font-medium hover:bg-green-700 flex-shrink-0"
+                                                    >
+                                                        Approve
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        )}
+
+                        {/* Audit Log Tab */}
+                        {activeTab === "audit" && (
+                            <div className="space-y-2 pb-8">
+                                {auditLog.length === 0 ? (
+                                    <p className="text-gray-600">No actions logged</p>
+                                ) : (
+                                    <div className="bg-white rounded-lg overflow-hidden">
+                                        {auditLog.map((log, idx) => (
+                                            <div key={idx} className="border-b border-gray-200 p-4 hover:bg-gray-50 last:border-b-0">
+                                                <div className="flex justify-between items-start gap-4">
+                                                    <div className="flex-1">
+                                                        <p className="font-medium text-gray-900 capitalize">{log.action.replace(/_/g, " ")}</p>
+                                                        <p className="text-sm text-gray-600 mt-1">
+                                                            {log.student_name || log.message || ""}
+                                                        </p>
+                                                    </div>
+                                                    <p className="text-xs text-gray-500 flex-shrink-0 font-mono">
+                                                        {new Date(log.timestamp).toLocaleTimeString()}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Student Detail Modal */}
+                    {selectedStudent && (
+                        <div className="modal-overlay" onClick={() => setSelectedStudent(null)}>
+                            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                                <div className="bg-gray-50 border-b border-gray-200 p-6 flex justify-between items-start">
+                                    <div>
+                                        <h2 className="text-2xl font-bold text-gray-900">{selectedStudent.name}</h2>
+                                        <p className="text-sm text-gray-600 mt-1">{selectedStudent.program}</p>
+                                    </div>
+                                    <button
+                                        onClick={() => setSelectedStudent(null)}
+                                        className="text-gray-400 hover:text-gray-600 text-2xl font-light"
+                                    >
+                                        ×
+                                    </button>
+                                </div>
+                                <div className="p-6 space-y-6">
+                                    {/* Decision Tree Results */}
+                                    <div>
+                                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Certification Results</h3>
+                                        <div className="bg-gray-50 p-4 rounded-lg grid grid-cols-2 gap-4">
+                                            <div>
+                                                <p className="text-sm text-gray-600">Certifiable Units</p>
+                                                <p className="text-2xl font-bold text-gray-900">
+                                                    {selectedStudent.dt_output.total_certifiable_units.toFixed(1)}
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <p className="text-sm text-gray-600">Training Time</p>
+                                                <p className="text-lg font-bold text-gray-900">
+                                                    {selectedStudent.dt_output.training_time ? selectedStudent.dt_output.training_time.replace(/_/g, " ") : "-"}
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <p className="text-sm text-gray-600">Residential / Distance</p>
+                                                <p className="text-lg font-bold text-gray-900">
+                                                    {selectedStudent.dt_output.residential_units.toFixed(1)} / {selectedStudent.dt_output.distance_units.toFixed(1)}
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <p className="text-sm text-gray-600">Rate of Pursuit</p>
+                                                <p className="text-lg font-bold text-gray-900">
+                                                    {(selectedStudent.dt_output.rate_of_pursuit * 100).toFixed(0)}%
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Courses Table */}
+                                    <div>
+                                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Course Breakdown</h3>
+                                        <div className="overflow-x-auto">
+                                            <table className="course-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Course ID</th>
+                                                        <th>Title</th>
+                                                        <th>Units</th>
+                                                        <th>Certifiable</th>
+                                                        <th>Modality</th>
+                                                        <th>Exclusion Reason</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {selectedStudent.dt_output.courses.map((course) => (
+                                                        <tr key={course.course_id}>
+                                                            <td className="font-mono font-medium">{course.course_id}</td>
+                                                            <td>{course.title}</td>
+                                                            <td className="text-right">{course.units}</td>
+                                                            <td className="text-center">
+                                                                <span className={course.certifiable ? "checkmark" : "xmark"}>
+                                                                    {course.certifiable ? "✓" : "✗"}
+                                                                </span>
+                                                            </td>
+                                                            <td className="text-sm">{course.modality || "-"}</td>
+                                                            <td className="text-sm text-red-700">
+                                                                {course.exclusion_reason ? course.exclusion_reason : "-"}
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    {/* HITL Flags */}
+                                    {selectedStudent.hitl_flags.length > 0 && (
+                                        <div>
+                                            <h3 className="text-lg font-semibold text-gray-900 mb-4">HITL Flags</h3>
+                                            <div className="space-y-2">
+                                                {selectedStudent.hitl_flags.map((flag, idx) => (
+                                                    <div key={idx} className="bg-yellow-50 border border-yellow-200 rounded p-3">
+                                                        <p className="text-sm font-medium text-yellow-800">{flag.description}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* SCO Queue Items */}
+                                    {selectedStudent.dt_output.sco_queue_items && selectedStudent.dt_output.sco_queue_items.length > 0 && (
+                                        <div>
+                                            <h3 className="text-lg font-semibold text-gray-900 mb-4">SCO Exception Queue</h3>
+                                            <div className="space-y-2">
+                                                {selectedStudent.dt_output.sco_queue_items.map((item, idx) => (
+                                                    <div key={idx} className="bg-red-50 border border-red-200 rounded p-3">
+                                                        <p className="text-sm font-medium text-red-800">
+                                                            {typeof item === "string" ? item : `${item.course_id}: ${item.exclusion_detail || item.exclusion_reason}`}
+                                                        </p>
+                                                        {item.flags && item.flags.length > 0 && (
+                                                            <p className="text-xs text-red-600 mt-1">{item.flags.join(", ")}</p>
+                                                        )}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Amendments */}
+                                    {selectedStudent.amendments && selectedStudent.amendments.length > 0 && (
+                                        <div>
+                                            <h3 className="text-lg font-semibold text-gray-900 mb-4">Pending Amendments</h3>
+                                            <div className="space-y-2">
+                                                {selectedStudent.amendments.map((amd) => (
+                                                    <div key={amd.id} className="bg-blue-50 border border-blue-200 rounded p-3">
+                                                        <p className="text-sm font-medium text-blue-800">{amd.reason}</p>
+                                                        <p className="text-xs text-blue-600 mt-1">
+                                                            Status: {amd.status}
+                                                        </p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        ReactDOM.render(<Dashboard />, document.getElementById("root"));
+    </script>
+</body>
+</html>

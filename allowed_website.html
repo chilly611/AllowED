@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AllowED — VA Certification, Automated</title>
+<style>
+/* ====== RESET & BASE ====== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, Helvetica, Arial, sans-serif; color: #0F172A; background: #ffffff; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+a { text-decoration: none; color: inherit; }
+button { border: none; cursor: pointer; font-family: inherit; }
+img { max-width: 100%; }
+
+/* ====== CSS VARIABLES ====== */
+:root {
+  --dark: #0F172A;
+  --blue: #1E40AF;
+  --blue-light: #3B82F6;
+  --blue-glow: #60A5FA;
+  --orange: #F97316;
+  --orange-light: #FB923C;
+  --green: #10B981;
+  --green-light: #34D399;
+  --gray-50: #F8FAFC;
+  --gray-100: #F1F5F9;
+  --gray-200: #E2E8F0;
+  --gray-300: #CBD5E1;
+  --gray-400: #94A3B8;
+  --gray-500: #64748B;
+  --gray-600: #475569;
+  --white: #FFFFFF;
+  --gradient-blue: linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%);
+  --gradient-hero: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #1E40AF 100%);
+  --gradient-orange: linear-gradient(135deg, #F97316 0%, #FB923C 100%);
+  --shadow-sm: 0 1px 3px rgba(15,23,42,0.08);
+  --shadow-md: 0 4px 20px rgba(15,23,42,0.1);
+  --shadow-lg: 0 10px 40px rgba(15,23,42,0.12);
+  --shadow-xl: 0 20px 60px rgba(15,23,42,0.15);
+  --shadow-glow: 0 0 40px rgba(30,64,175,0.3);
+}
+
+/* ====== UTILITIES ====== */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ====== NAV ====== */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  padding: 16px 0;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(226,232,240,0.5);
+  transition: all 0.3s ease;
+}
+.nav.scrolled { padding: 10px 0; box-shadow: var(--shadow-sm); }
+.nav-inner { display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.nav-logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; }
+.nav-logo span { color: var(--blue); }
+.nav-logo em { font-style: normal; color: var(--orange); }
+.nav-links { display: flex; align-items: center; gap: 32px; }
+.nav-links a { font-size: 0.9rem; font-weight: 500; color: var(--gray-500); transition: color 0.2s; }
+.nav-links a:hover { color: var(--dark); }
+.nav-cta {
+  background: var(--gradient-blue); color: white;
+  padding: 10px 24px; border-radius: 100px;
+  font-size: 0.9rem; font-weight: 600;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.nav-cta:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+
+/* ====== HERO ====== */
+.hero {
+  min-height: 100vh; display: flex; align-items: center;
+  background: var(--gradient-hero); color: white;
+  position: relative; overflow: hidden;
+  padding: 120px 0 80px;
+}
+.hero::before {
+  content: ''; position: absolute; top: -50%; right: -20%;
+  width: 800px; height: 800px;
+  background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%);
+  animation: pulse 8s ease-in-out infinite;
+}
+.hero::after {
+  content: ''; position: absolute; bottom: -30%; left: -10%;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(249,115,22,0.1) 0%, transparent 70%);
+  animation: pulse 10s ease-in-out infinite reverse;
+}
+@keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.2); opacity: 1; } }
+
+.hero-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; position: relative; z-index: 1; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+  padding: 6px 16px; border-radius: 100px;
+  font-size: 0.8rem; font-weight: 500; color: rgba(255,255,255,0.8);
+  margin-bottom: 24px;
+  animation: fadeInUp 0.8s ease forwards;
+}
+.hero-badge .dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: blink 2s infinite; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+.hero h1 {
+  font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800;
+  line-height: 1.08; letter-spacing: -0.03em;
+  margin-bottom: 24px;
+  animation: fadeInUp 0.8s ease 0.1s forwards; opacity: 0;
+}
+.hero h1 .highlight {
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-light) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-subtitle {
+  font-size: 1.2rem; line-height: 1.6; color: rgba(255,255,255,0.7);
+  max-width: 480px; margin-bottom: 40px;
+  animation: fadeInUp 0.8s ease 0.2s forwards; opacity: 0;
+}
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+.hero-ctas {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  animation: fadeInUp 0.8s ease 0.3s forwards; opacity: 0;
+}
+.btn-primary {
+  background: var(--gradient-orange); color: white;
+  padding: 16px 32px; border-radius: 100px;
+  font-size: 1rem; font-weight: 700;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 20px rgba(249,115,22,0.3);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(249,115,22,0.4); }
+.btn-secondary {
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+  color: white; padding: 16px 32px; border-radius: 100px;
+  font-size: 1rem; font-weight: 600;
+  transition: all 0.2s;
+}
+.btn-secondary:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); }
+
+/* Hero visual */
+.hero-visual {
+  position: relative;
+  animation: fadeInUp 1s ease 0.4s forwards; opacity: 0;
+}
+.hero-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px; padding: 32px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.hero-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+.hero-card-dot { width: 12px; height: 12px; border-radius: 50%; }
+.hero-card-dot.red { background: #EF4444; }
+.hero-card-dot.yellow { background: #EAB308; }
+.hero-card-dot.green { background: #22C55E; }
+.hero-card-title { font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-left: 8px; }
+
+.cert-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px; border-radius: 12px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+  cursor: default;
+}
+.cert-row:hover { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.12); }
+.cert-name { font-size: 0.9rem; font-weight: 600; color: rgba(255,255,255,0.9); }
+.cert-id { font-size: 0.8rem; color: rgba(255,255,255,0.4); }
+.cert-status {
+  padding: 4px 12px; border-radius: 100px;
+  font-size: 0.75rem; font-weight: 600;
+  animation: statusPulse 3s ease infinite;
+}
+.cert-status.ready { background: rgba(16,185,129,0.15); color: var(--green-light); }
+.cert-status.processing { background: rgba(59,130,246,0.15); color: var(--blue-glow); animation-delay: 1s; }
+.cert-status.submitted { background: rgba(249,115,22,0.15); color: var(--orange-light); animation-delay: 2s; }
+@keyframes statusPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+
+.hero-metric {
+  display: flex; gap: 24px; margin-top: 20px; padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.hero-metric-item { text-align: center; flex: 1; }
+.hero-metric-num { font-size: 1.4rem; font-weight: 800; color: var(--orange-light); }
+.hero-metric-label { font-size: 0.7rem; color: rgba(255,255,255,0.4); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* ====== SOCIAL PROOF BAR ====== */
+.proof-bar {
+  background: var(--gray-50); border-top: 1px solid var(--gray-200); border-bottom: 1px solid var(--gray-200);
+  padding: 40px 0;
+}
+.proof-inner { display: flex; align-items: center; justify-content: center; gap: 60px; flex-wrap: wrap; }
+.proof-stat { text-align: center; }
+.proof-num { font-size: 2rem; font-weight: 800; color: var(--dark); }
+.proof-num .counter { display: inline; }
+.proof-label { font-size: 0.85rem; color: var(--gray-500); margin-top: 4px; }
+
+/* ====== FEATURE SECTIONS ====== */
+.section { padding: 120px 0; }
+.section-dark { background: var(--dark); color: white; }
+.section-gray { background: var(--gray-50); }
+
+.section-header { text-align: center; max-width: 700px; margin: 0 auto 64px; }
+.section-header .eyebrow {
+  font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--orange); margin-bottom: 16px;
+}
+.section-header h2 {
+  font-size: clamp(2rem, 4vw, 3rem); font-weight: 800;
+  line-height: 1.1; letter-spacing: -0.02em;
+  margin-bottom: 20px;
+}
+.section-header p { font-size: 1.1rem; line-height: 1.6; color: var(--gray-500); }
+.section-dark .section-header p { color: rgba(255,255,255,0.6); }
+
+/* Feature grid */
+.feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.feature-card {
+  padding: 40px 32px; border-radius: 20px;
+  background: white; border: 1px solid var(--gray-200);
+  transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+  position: relative; overflow: hidden;
+}
+.feature-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--gradient-blue); opacity: 0;
+  transition: opacity 0.3s;
+}
+.feature-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: transparent; }
+.feature-card:hover::before { opacity: 1; }
+.feature-icon {
+  width: 56px; height: 56px; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; margin-bottom: 24px;
+}
+.feature-icon.blue { background: rgba(30,64,175,0.08); color: var(--blue); }
+.feature-icon.orange { background: rgba(249,115,22,0.08); color: var(--orange); }
+.feature-icon.green { background: rgba(16,185,129,0.08); color: var(--green); }
+.feature-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 12px; }
+.feature-card p { font-size: 0.95rem; line-height: 1.6; color: var(--gray-500); }
+
+/* ====== INTERACTIVE DEMO SECTION ====== */
+.demo-section { background: var(--dark); color: white; padding: 120px 0; overflow: hidden; }
+.demo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+.demo-text .eyebrow { color: var(--orange); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px; }
+.demo-text h2 { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 24px; }
+.demo-text p { font-size: 1.05rem; line-height: 1.7; color: rgba(255,255,255,0.6); margin-bottom: 32px; }
+
+/* Interactive tabs */
+.demo-tabs { display: flex; gap: 8px; margin-bottom: 32px; }
+.demo-tab {
+  padding: 10px 20px; border-radius: 100px;
+  font-size: 0.85rem; font-weight: 600;
+  background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5);
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: all 0.3s;
+}
+.demo-tab.active { background: var(--blue); color: white; border-color: var(--blue); box-shadow: 0 4px 20px rgba(30,64,175,0.4); }
+.demo-tab:hover:not(.active) { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); }
+
+.demo-content { display: none; }
+.demo-content.active { display: block; animation: fadeIn 0.4s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Step list */
+.step-list { display: flex; flex-direction: column; gap: 16px; }
+.step-item {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 16px; border-radius: 12px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: all 0.3s;
+}
+.step-item:hover { background: rgba(255,255,255,0.06); }
+.step-num {
+  width: 32px; height: 32px; min-width: 32px; border-radius: 50%;
+  background: var(--gradient-blue);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem; font-weight: 700; color: white;
+}
+.step-item h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
+.step-item p { font-size: 0.85rem; color: rgba(255,255,255,0.5); line-height: 1.5; }
+
+/* Demo visual */
+.demo-visual {
+  position: relative; perspective: 1000px;
+}
+.demo-screen {
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px; padding: 24px;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.4);
+  transform: rotateY(-5deg) rotateX(2deg);
+  transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
+}
+.demo-screen:hover { transform: rotateY(0deg) rotateX(0deg); }
+.demo-screen-bar { display: flex; gap: 8px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.demo-screen-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.15); }
+
+.live-feed { display: flex; flex-direction: column; gap: 10px; }
+.feed-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; border-radius: 10px;
+  background: rgba(255,255,255,0.03);
+  border-left: 3px solid transparent;
+  opacity: 0; transform: translateX(-20px);
+  animation: feedSlideIn 0.5s ease forwards;
+}
+.feed-item:nth-child(1) { animation-delay: 0.2s; border-left-color: var(--green); }
+.feed-item:nth-child(2) { animation-delay: 0.4s; border-left-color: var(--blue-light); }
+.feed-item:nth-child(3) { animation-delay: 0.6s; border-left-color: var(--orange); }
+.feed-item:nth-child(4) { animation-delay: 0.8s; border-left-color: var(--green); }
+.feed-item:nth-child(5) { animation-delay: 1.0s; border-left-color: var(--blue-light); }
+@keyframes feedSlideIn { to { opacity: 1; transform: translateX(0); } }
+.feed-icon { font-size: 1.2rem; }
+.feed-text { font-size: 0.8rem; color: rgba(255,255,255,0.7); flex: 1; }
+.feed-time { font-size: 0.7rem; color: rgba(255,255,255,0.3); }
+
+/* ====== NUMBERS SECTION ====== */
+.numbers-section { padding: 100px 0; background: white; }
+.numbers-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; }
+.number-card { text-align: center; }
+.number-value {
+  font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 800;
+  background: var(--gradient-blue);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.1;
+}
+.number-label { font-size: 0.95rem; color: var(--gray-500); margin-top: 8px; }
+
+/* ====== PRODUCT PIPELINE ====== */
+.pipeline-section { padding: 120px 0; background: var(--gray-50); }
+.timeline { position: relative; max-width: 900px; margin: 0 auto; }
+.timeline::before {
+  content: ''; position: absolute; left: 50%; top: 0; bottom: 0;
+  width: 2px; background: var(--gray-200);
+  transform: translateX(-50%);
+}
+.timeline-item {
+  display: flex; align-items: flex-start; gap: 40px;
+  margin-bottom: 48px; position: relative;
+}
+.timeline-item:nth-child(even) { flex-direction: row-reverse; text-align: right; }
+.timeline-dot {
+  position: absolute; left: 50%; top: 8px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--blue); border: 3px solid white;
+  box-shadow: var(--shadow-md);
+  transform: translateX(-50%);
+  z-index: 1;
+}
+.timeline-item.active .timeline-dot { background: var(--orange); box-shadow: 0 0 20px rgba(249,115,22,0.4); }
+.timeline-content {
+  flex: 1; max-width: calc(50% - 40px);
+  padding: 24px; border-radius: 16px;
+  background: white; border: 1px solid var(--gray-200);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s;
+}
+.timeline-content:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.timeline-year { font-size: 0.75rem; font-weight: 700; color: var(--orange); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+.timeline-content h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+.timeline-content p { font-size: 0.9rem; color: var(--gray-500); line-height: 1.6; }
+.timeline-spacer { flex: 1; max-width: calc(50% - 40px); }
+
+/* ====== AUDIENCE TABS ====== */
+.audience-section { padding: 120px 0; }
+.audience-tabs { display: flex; justify-content: center; gap: 8px; margin-bottom: 48px; }
+.audience-tab {
+  padding: 12px 28px; border-radius: 100px;
+  font-size: 0.95rem; font-weight: 600;
+  background: var(--gray-100); color: var(--gray-500);
+  border: 1px solid var(--gray-200);
+  transition: all 0.3s;
+}
+.audience-tab.active { background: var(--dark); color: white; border-color: var(--dark); box-shadow: var(--shadow-md); }
+.audience-tab:hover:not(.active) { background: var(--gray-200); color: var(--dark); }
+
+.audience-panel { display: none; }
+.audience-panel.active { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; animation: fadeIn 0.5s ease; }
+.audience-visual {
+  background: var(--gray-50); border: 1px solid var(--gray-200);
+  border-radius: 20px; padding: 40px;
+  position: relative;
+}
+.audience-visual-tag {
+  position: absolute; top: -12px; left: 24px;
+  background: var(--gradient-orange); color: white;
+  padding: 4px 16px; border-radius: 100px;
+  font-size: 0.75rem; font-weight: 700;
+}
+.audience-list { display: flex; flex-direction: column; gap: 20px; }
+.audience-item { display: flex; gap: 16px; }
+.audience-check {
+  width: 28px; height: 28px; min-width: 28px; border-radius: 50%;
+  background: rgba(16,185,129,0.1); color: var(--green);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.9rem;
+}
+.audience-item h4 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+.audience-item p { font-size: 0.9rem; color: var(--gray-500); line-height: 1.5; }
+
+/* ====== CTA SECTION ====== */
+.cta-section {
+  padding: 120px 0;
+  background: var(--gradient-hero); color: white;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.cta-section::before {
+  content: ''; position: absolute; top: 50%; left: 50%;
+  width: 1000px; height: 1000px;
+  background: radial-gradient(circle, rgba(249,115,22,0.1) 0%, transparent 60%);
+  transform: translate(-50%, -50%);
+}
+.cta-section h2 { font-size: clamp(2.2rem, 4vw, 3.2rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 20px; position: relative; }
+.cta-section p { font-size: 1.1rem; color: rgba(255,255,255,0.6); max-width: 600px; margin: 0 auto 40px; position: relative; }
+.cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; position: relative; }
+
+/* ====== FOOTER ====== */
+.footer {
+  background: var(--dark); color: rgba(255,255,255,0.5);
+  padding: 64px 0 32px;
+}
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 48px; }
+.footer-brand .nav-logo { font-size: 1.3rem; margin-bottom: 12px; display: block; color: white; }
+.footer-brand p { font-size: 0.85rem; line-height: 1.6; max-width: 280px; }
+.footer-col h4 { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.3); margin-bottom: 16px; }
+.footer-col a { display: block; font-size: 0.9rem; color: rgba(255,255,255,0.5); padding: 4px 0; transition: color 0.2s; }
+.footer-col a:hover { color: white; }
+.footer-bottom { padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; }
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 768px) {
+  .hero-inner { grid-template-columns: 1fr; text-align: center; }
+  .hero-subtitle { margin-left: auto; margin-right: auto; }
+  .hero-ctas { justify-content: center; }
+  .hero-visual { display: none; }
+  .feature-grid { grid-template-columns: 1fr; }
+  .demo-grid { grid-template-columns: 1fr; }
+  .demo-visual { display: none; }
+  .numbers-grid { grid-template-columns: repeat(2, 1fr); }
+  .audience-panel.active { grid-template-columns: 1fr; }
+  .audience-visual { display: none; }
+  .timeline::before { left: 20px; }
+  .timeline-item, .timeline-item:nth-child(even) { flex-direction: column; padding-left: 50px; text-align: left; }
+  .timeline-dot { left: 20px; }
+  .timeline-content, .timeline-spacer { max-width: 100%; }
+  .timeline-spacer { display: none; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .nav-links { display: none; }
+  .proof-inner { gap: 32px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ====== NAVIGATION ====== -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo"><span>Allow</span><em>ED</em></a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="#who">Who It's For</a>
+      <a href="#pipeline">Roadmap</a>
+      <button class="nav-cta" onclick="scrollToSection('cta')">Request Demo</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ====== HERO ====== -->
+<section class="hero" id="hero">
+  <div class="container hero-inner">
+    <div class="hero-text">
+      <div class="hero-badge"><span class="dot"></span> Now automating VA certifications</div>
+      <h1>Certify veterans<br>in <span class="highlight">seconds,</span><br>not hours.</h1>
+      <p class="hero-subtitle">AllowED replaces spreadsheets, dual screens, and manual workflows with an AI-powered engine that certifies veteran student enrollments automatically.</p>
+      <div class="hero-ctas">
+        <button class="btn-primary" onclick="scrollToSection('cta')">Request Early Access</button>
+        <button class="btn-secondary" onclick="scrollToSection('how-it-works')">See How It Works</button>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card">
+        <div class="hero-card-header">
+          <span class="hero-card-dot red"></span>
+          <span class="hero-card-dot yellow"></span>
+          <span class="hero-card-dot green"></span>
+          <span class="hero-card-title">AllowED Workstation</span>
+        </div>
+        <div class="cert-row">
+          <div><div class="cert-name">James Roster</div><div class="cert-id">Red ID: 824719305</div></div>
+          <span class="cert-status ready">Certified</span>
+        </div>
+        <div class="cert-row">
+          <div><div class="cert-name">Maria Santos</div><div class="cert-id">Red ID: 831205847</div></div>
+          <span class="cert-status processing">Processing</span>
+        </div>
+        <div class="cert-row">
+          <div><div class="cert-name">James Mitchell</div><div class="cert-id">Red ID: 829461023</div></div>
+          <span class="cert-status submitted">Submitted to VA</span>
+        </div>
+        <div class="cert-row">
+          <div><div class="cert-name">Angela Park</div><div class="cert-id">Red ID: 827653190</div></div>
+          <span class="cert-status ready">Certified</span>
+        </div>
+        <div class="hero-metric">
+          <div class="hero-metric-item"><div class="hero-metric-num">2,487</div><div class="hero-metric-label">Students</div></div>
+          <div class="hero-metric-item"><div class="hero-metric-num">12s</div><div class="hero-metric-label">Avg. Time</div></div>
+          <div class="hero-metric-item"><div class="hero-metric-num">99.8%</div><div class="hero-metric-label">Accuracy</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== SOCIAL PROOF BAR ====== -->
+<section class="proof-bar">
+  <div class="container proof-inner">
+    <div class="proof-stat"><div class="proof-num"><span class="counter" data-target="7">0</span></div><div class="proof-label">Compliance modules</div></div>
+    <div class="proof-stat"><div class="proof-num"><span class="counter" data-target="63">0</span>/<span class="counter" data-target="63">0</span></div><div class="proof-label">Decision tree checks passing</div></div>
+    <div class="proof-stat"><div class="proof-num"><span class="counter" data-target="853">0</span></div><div class="proof-label">WEAMS programs mapped</div></div>
+    <div class="proof-stat"><div class="proof-num"><span class="counter" data-target="2">0</span></div><div class="proof-label">Universities supported</div></div>
+  </div>
+</section>
+
+<!-- ====== FEATURES ====== -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="eyebrow">Features</div>
+      <h2>Everything SCOs need.<br>Nothing they don't.</h2>
+      <p>Built by a School Certifying Official who processes 2,500 certifications per semester. Every feature solves a real problem.</p>
+    </div>
+    <div class="feature-grid">
+      <div class="feature-card reveal reveal-delay-1">
+        <div class="feature-icon blue">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <h3>7-Step Decision Tree</h3>
+        <p>Every course evaluated through a 7-step rule engine based on 38 CFR and the SCO Handbook. 63 checks. Zero guesswork.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-2">
+        <div class="feature-icon orange">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </div>
+        <h3>WEAMS Crosswalk</h3>
+        <p>853 real VA-approved programs from WEAMS, matched with 3-tier confidence scoring. Multi-institution support from day one.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-3">
+        <div class="feature-icon green">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <h3>Auto-Certification</h3>
+        <p>Clean enrollments certify automatically. Risky ones flag for human review. Batch processing for hundreds of students at once.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-1">
+        <div class="feature-icon blue">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <h3>Amendment Engine</h3>
+        <p>Detects enrollment changes automatically. Generates the correct amendment type based on academic calendar and VA rules.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-2">
+        <div class="feature-icon orange">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        </div>
+        <h3>Dual Certification</h3>
+        <p>Enrollment and Tuition & Fees tracked as separate certification paths. Ch. 33 payment flow fully automated from bursar to VA.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-3">
+        <div class="feature-icon green">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>Full Audit Trail</h3>
+        <p>Every action logged. Every decision traceable. Ready for VA audits, institutional reviews, and compliance reporting.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== HOW IT WORKS (Interactive Demo) ====== -->
+<section class="demo-section" id="how-it-works">
+  <div class="container">
+    <div class="demo-grid">
+      <div class="demo-text reveal">
+        <div class="eyebrow">How It Works</div>
+        <h2>From enrollment<br>to VA submission<br>in seconds.</h2>
+        <p>AllowED connects to your Student Information System, applies VA rules automatically, and submits certifications through the VA API. Here's the flow:</p>
+        <div class="demo-tabs">
+          <button class="demo-tab active" onclick="switchDemoTab(0)">Certify</button>
+          <button class="demo-tab" onclick="switchDemoTab(1)">Monitor</button>
+          <button class="demo-tab" onclick="switchDemoTab(2)">Submit</button>
+        </div>
+        <div class="demo-content active" id="demo-0">
+          <div class="step-list">
+            <div class="step-item"><div class="step-num">1</div><div><h4>Pull enrollment data</h4><p>AllowED reads directly from PeopleSoft, Ellucian, or your SIS.</p></div></div>
+            <div class="step-item"><div class="step-num">2</div><div><h4>Run decision tree</h4><p>7-step rule engine evaluates every course: audit filter, repeat check, modality, training time, RoP.</p></div></div>
+            <div class="step-item"><div class="step-num">3</div><div><h4>Match to WEAMS</h4><p>3-tier matching (exact, structured, fuzzy) confirms the student's program is VA-approved.</p></div></div>
+            <div class="step-item"><div class="step-num">4</div><div><h4>Certify or flag</h4><p>Clean certifications auto-process. Anything risky goes to the SCO review queue.</p></div></div>
+          </div>
+        </div>
+        <div class="demo-content" id="demo-1">
+          <div class="step-list">
+            <div class="step-item"><div class="step-num">1</div><div><h4>Snapshot comparison</h4><p>AllowED takes enrollment snapshots and detects adds, drops, withdrawals, and unit changes.</p></div></div>
+            <div class="step-item"><div class="step-num">2</div><div><h4>Academic calendar aware</h4><p>Knows your add/drop deadline, census date, and withdrawal deadline. Generates the right amendment type.</p></div></div>
+            <div class="step-item"><div class="step-num">3</div><div><h4>Program change detection</h4><p>Catches major changes and triggers WEAMS re-match. Always flags for SCO review.</p></div></div>
+            <div class="step-item"><div class="step-num">4</div><div><h4>Graduation tracking</h4><p>Detects degree conferral, generates graduated amendment, verifies final-term rounding out eligibility.</p></div></div>
+          </div>
+        </div>
+        <div class="demo-content" id="demo-2">
+          <div class="step-list">
+            <div class="step-item"><div class="step-num">1</div><div><h4>Generate EM fields</h4><p>Decision tree output maps to every Enrollment Manager field. Credits, tuition, training time, chapter.</p></div></div>
+            <div class="step-item"><div class="step-num">2</div><div><h4>Create certification PDF</h4><p>Professional PDF with student info, course detail, certification statement. Audit-ready.</p></div></div>
+            <div class="step-item"><div class="step-num">3</div><div><h4>Submit via VA API</h4><p>Upload to VA Benefits Intake API. Track status in real-time. Rate limits handled automatically.</p></div></div>
+            <div class="step-item"><div class="step-num">4</div><div><h4>Confirm &amp; log</h4><p>Submission confirmed. GUID tracked. Full audit trail preserved for every action.</p></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-visual reveal reveal-delay-2">
+        <div class="demo-screen">
+          <div class="demo-screen-bar">
+            <span class="demo-screen-dot"></span>
+            <span class="demo-screen-dot"></span>
+            <span class="demo-screen-dot"></span>
+          </div>
+          <div class="live-feed" id="liveFeed">
+            <div class="feed-item"><span class="feed-icon">&#10003;</span><span class="feed-text">James Roster &mdash; Ch. 33 certified, 12 units, full-time</span><span class="feed-time">2s ago</span></div>
+            <div class="feed-item"><span class="feed-icon">&#9881;</span><span class="feed-text">Maria Santos &mdash; Running decision tree (Step 4/7)</span><span class="feed-time">5s ago</span></div>
+            <div class="feed-item"><span class="feed-icon">&#9888;</span><span class="feed-text">James Mitchell &mdash; HITL flag: Low WEAMS confidence</span><span class="feed-time">8s ago</span></div>
+            <div class="feed-item"><span class="feed-icon">&#10003;</span><span class="feed-text">Angela Park &mdash; Submitted to VA (GUID: 9dca...)</span><span class="feed-time">12s ago</span></div>
+            <div class="feed-item"><span class="feed-icon">&#9881;</span><span class="feed-text">Robert Torres &mdash; Ch. 31 PO validation pending</span><span class="feed-time">15s ago</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== NUMBERS ====== -->
+<section class="numbers-section">
+  <div class="container">
+    <div class="numbers-grid">
+      <div class="number-card reveal"><div class="number-value" data-count="2500">0</div><div class="number-label">Certifications per semester</div></div>
+      <div class="number-card reveal reveal-delay-1"><div class="number-value" data-count="12">0</div><div class="number-label">Seconds average processing</div></div>
+      <div class="number-card reveal reveal-delay-2"><div class="number-value" data-count="90">0</div><div class="number-label">Checks passing (of 90)</div></div>
+      <div class="number-card reveal reveal-delay-3"><div class="number-value">$2.3B</div><div class="number-label">VA spending on GI Bill automation</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== WHO IT'S FOR ====== -->
+<section class="section section-gray" id="who">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="eyebrow">Who It's For</div>
+      <h2>Built for every stakeholder<br>in veteran education.</h2>
+    </div>
+    <div class="audience-tabs">
+      <button class="audience-tab active" onclick="switchAudienceTab(0)">SCOs</button>
+      <button class="audience-tab" onclick="switchAudienceTab(1)">Students</button>
+      <button class="audience-tab" onclick="switchAudienceTab(2)">Administrators</button>
+    </div>
+
+    <div class="audience-panel active" id="audience-0">
+      <div class="audience-content">
+        <h3 style="font-size:1.6rem;font-weight:800;margin-bottom:20px;">Your spreadsheets are retired.</h3>
+        <p style="font-size:1.05rem;color:var(--gray-500);line-height:1.7;margin-bottom:32px;">AllowED replaces the dual-screen PeopleSoft + Enrollment Manager workflow with a single, intelligent workstation. Exception-first design means you only touch what needs human judgment.</p>
+        <div class="audience-list">
+          <div class="audience-item"><div class="audience-check">&#10003;</div><div><h4>Batch certify clean enrollments in one click</h4><p>Students with no flags certify automatically. You review only the exceptions.</p></div></div>
+          <div class="audience-item"><div class="audience-check">&#10003;</div><div><h4>Amendments generated for you</h4><p>Drops, withdrawals, program changes — AllowED detects them and drafts the right amendment.</p></div></div>
+          <div class="audience-item"><div class="audience-check">&#10003;</div><div><h4>Every rule documented and traceable</h4><p>38 CFR, SCO Handbook Rev 7.4, institutional policy. Every decision has a citation.</p></div></div>
+        </div>
+      </div>
+      <div class="audience-visual">
+        <div class="audience-visual-tag">SCO Workstation</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:14px;border-radius:10px;background:white;box-shadow:var(--shadow-sm);">
+            <div><div style="font-weight:700;font-size:0.9rem;">Certification Queue</div><div style="font-size:0.8rem;color:var(--gray-400);">12 students ready</div></div>
+            <div style="background:rgba(16,185,129,0.1);color:var(--green);padding:4px 12px;border-radius:100px;font-size:0.75rem;font-weight:600;">Certify All</div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:14px;border-radius:10px;background:white;box-shadow:var(--shadow-sm);">
+            <div><div style="font-weight:700;font-size:0.9rem;">HITL Review</div><div style="font-size:0.8rem;color:var(--gray-400);">3 items need attention</div></div>
+            <div style="background:rgba(249,115,22,0.1);color:var(--orange);padding:4px 12px;border-radius:100px;font-size:0.75rem;font-weight:600;">Review</div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:14px;border-radius:10px;background:white;box-shadow:var(--shadow-sm);">
+            <div><div style="font-weight:700;font-size:0.9rem;">Amendments</div><div style="font-size:0.8rem;color:var(--gray-400);">2 pending approval</div></div>
+            <div style="background:rgba(30,64,175,0.1);color:var(--blue);padding:4px 12px;border-radius:100px;font-size:0.75rem;font-weight:600;">View</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="audience-panel" id="audience-1">
+      <div class="audience-content">
+        <h3 style="font-size:1.6rem;font-weight:800;margin-bottom:20px;">Track your benefits like a package.</h3>
+        <p style="font-size:1.05rem;color:var(--gray-500);line-height:1.7;margin-bottom:32px;">No more calling the VA office wondering if your certification went through. AllowED gives students a real-time progress tracker from enrollment to payment.</p>
+        <div class="audience-list">
+          <div class="audience-item"><div class="audience-check">&#10003;</div><div><h4>5-stage progress tracker</h4><p>See exactly where your certification is: enrolled, certified, submitted, processed, paid.</p></div></div>
+          <div class="audience-item"><div class="audience-check">&#10003;</div><div><h4>Red ID lookup</h4><p>Enter your student ID and see your status instantly. No login required.</p></div></div>
+          <div class="audience-item"><div class="audience-check">&#10003;</div><div><h4>Mobile-first design</h4><p>Check your status from anywhere. Built for phones first, desktops second.</p></div></div>
+        </div>
+      </div>
+      <div class="audience-visual">
+        <div class="audience-visual-tag">Student Portal</div>
+        <div style="display:flex;flex-direction:column;gap:16px;align-items:center;">
+          <div style="font-weight:700;font-size:0.95rem;text-align:center;">Your Certification Status</div>
+          <div style="display:flex;gap:4px;width:100%;">
+            <div style="flex:1;height:8px;border-radius:4px;background:var(--green);"></div>
+            <div style="flex:1;height:8px;border-radius:4px;background:var(--green);"></div>
+            <div style="flex:1;height:8px;border-radius:4px;background:var(--green);"></div>
+            <div style="flex:1;height:8px;border-radius:4px;background:var(--blue-light);animation:progressPulse 1.5s infinite;"></div>
+            <div style="flex:1;height:8px;border-radius:4px;background:var(--gray-200);"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;width:100%;font-size:0.7rem;color:var(--gray-400);">
+            <span>Enrolled</span><span>Certified</span><span>Submitted</span><span style="color:var(--blue);font-weight:600;">Processing</span><span>Paid</span>
+          </div>
+          <div style="margin-top:12px;padding:16px;background:white;border-radius:12px;width:100%;box-shadow:var(--shadow-sm);">
+            <div style="font-weight:700;font-size:0.85rem;">Ch. 33 Post-9/11 GI Bill</div>
+            <div style="font-size:0.8rem;color:var(--gray-400);margin-top:4px;">Submitted to VA on April 12, 2026</div>
+            <div style="font-size:0.8rem;color:var(--green);margin-top:8px;font-weight:600;">Estimated payment: 5-7 business days</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="audience-panel" id="audience-2">
+      <div class="audience-content">
+        <h3 style="font-size:1.6rem;font-weight:800;margin-bottom:20px;">Data you've never had before.</h3>
+        <p style="font-size:1.05rem;color:var(--gray-500);line-height:1.7;margin-bottom:32px;">AllowED gives administrators real-time visibility into certification volume, SCO workload, processing times, and compliance status across the entire institution.</p>
+        <div class="audience-list">
+          <div class="audience-item"><div class="audience-check">&#10003;</div><div><h4>Live metrics dashboard</h4><p>Total certifications, average processing time, error rates, SCO performance — all in real time.</p></div></div>
+          <div class="audience-item"><div class="audience-check">&#10003;</div><div><h4>Semester analytics</h4><p>Trends over time. Predict peak periods. Staff accordingly. Prove ROI to leadership.</p></div></div>
+          <div class="audience-item"><div class="audience-check">&#10003;</div><div><h4>Audit-ready compliance</h4><p>Every certification decision documented with rule citations. VA audits become a formality.</p></div></div>
+        </div>
+      </div>
+      <div class="audience-visual">
+        <div class="audience-visual-tag">Admin Dashboard</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div style="background:white;padding:16px;border-radius:10px;box-shadow:var(--shadow-sm);text-align:center;">
+              <div style="font-size:1.5rem;font-weight:800;color:var(--blue);">2,487</div>
+              <div style="font-size:0.7rem;color:var(--gray-400);">Total Certified</div>
+            </div>
+            <div style="background:white;padding:16px;border-radius:10px;box-shadow:var(--shadow-sm);text-align:center;">
+              <div style="font-size:1.5rem;font-weight:800;color:var(--green);">99.8%</div>
+              <div style="font-size:0.7rem;color:var(--gray-400);">Accuracy Rate</div>
+            </div>
+          </div>
+          <div style="background:white;padding:16px;border-radius:10px;box-shadow:var(--shadow-sm);">
+            <div style="font-size:0.8rem;font-weight:700;margin-bottom:12px;">Processing Time Trend</div>
+            <div style="display:flex;align-items:flex-end;gap:4px;height:60px;">
+              <div style="flex:1;background:var(--gray-200);border-radius:4px 4px 0 0;height:80%;"></div>
+              <div style="flex:1;background:var(--gray-200);border-radius:4px 4px 0 0;height:65%;"></div>
+              <div style="flex:1;background:var(--gray-200);border-radius:4px 4px 0 0;height:50%;"></div>
+              <div style="flex:1;background:var(--gray-200);border-radius:4px 4px 0 0;height:35%;"></div>
+              <div style="flex:1;background:var(--blue-light);border-radius:4px 4px 0 0;height:20%;"></div>
+            </div>
+            <div style="font-size:0.7rem;color:var(--gray-400);margin-top:8px;text-align:center;">Processing time reduced 75% since deployment</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== PRODUCT PIPELINE ====== -->
+<section class="pipeline-section" id="pipeline">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="eyebrow">Roadmap</div>
+      <h2>We're just getting started.</h2>
+      <p>VA certification is the wedge. The vision is the AI-powered compliance and success engine for all of higher education.</p>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item active reveal">
+        <div class="timeline-content">
+          <div class="timeline-year">Now &mdash; 2026</div>
+          <h3>VA Certification Engine</h3>
+          <p>Full automation of VA enrollment certification, amendments, T&F tracking, and VA API submission. Multi-institution support.</p>
+        </div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-spacer"></div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-spacer"></div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">2027</div>
+          <h3>Title IV Compliance AutoPilot</h3>
+          <p>R2T4 calculations, SAP monitoring, financial aid recalculation. The highest audit risk in higher ed, automated.</p>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-content">
+          <div class="timeline-year">2027</div>
+          <h3>GI Bill Optimizer</h3>
+          <p>AI tool helping veterans maximize their benefits: GI Bill + scholarships + VR&E + VetTec. Mobile-first.</p>
+        </div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-spacer"></div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-spacer"></div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">2028</div>
+          <h3>Student Success Intelligence</h3>
+          <p>Predictive AI agents that identify at-risk students and autonomously trigger interventions before they drop out.</p>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-content">
+          <div class="timeline-year">2029+</div>
+          <h3>Higher Ed Compliance Platform</h3>
+          <p>API marketplace connecting all compliance tools. VA, Title IV, accreditation, FERPA — orchestrated through one engine.</p>
+        </div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-spacer"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== CTA ====== -->
+<section class="cta-section" id="cta">
+  <div class="container">
+    <h2 class="reveal">The VA is spending $2.3 billion<br>to automate their side.<br><span style="background:linear-gradient(135deg,var(--orange),var(--orange-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">We're building yours.</span></h2>
+    <p class="reveal reveal-delay-1">AllowED is accepting early-access partners from universities ready to transform how they serve veteran students.</p>
+    <div class="cta-buttons reveal reveal-delay-2">
+      <button class="btn-primary" style="font-size:1.1rem;padding:18px 40px;" onclick="document.getElementById('contactEmail').focus()">Request Early Access</button>
+      <button class="btn-secondary" onclick="scrollToSection('how-it-works')">Watch Demo</button>
+    </div>
+    <div class="reveal reveal-delay-3" style="margin-top:40px;">
+      <input type="email" id="contactEmail" placeholder="Enter your work email" style="padding:16px 24px;border-radius:100px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:white;font-size:1rem;width:100%;max-width:400px;outline:none;text-align:center;" />
+      <div style="margin-top:12px;font-size:0.8rem;color:rgba(255,255,255,0.4);">No spam. We'll reach out personally within 24 hours.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== FOOTER ====== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <span class="nav-logo"><span>Allow</span><em>ED</em></span>
+        <p>AI-powered VA certification automation for higher education. Built by an SCO, for SCOs.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#who">Who It's For</a>
+        <a href="#pipeline">Roadmap</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#">About</a>
+        <a href="#">Careers</a>
+        <a href="#">Contact</a>
+        <a href="#">Press</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="#">Documentation</a>
+        <a href="#">SCO Handbook</a>
+        <a href="#">VA API Guide</a>
+        <a href="#">Blog</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>&copy; 2026 AllowED. All rights reserved.</div>
+      <div><a href="#">Privacy</a> &nbsp;&middot;&nbsp; <a href="#">Terms</a></div>
+    </div>
+  </div>
+</footer>
+
+<style>
+@keyframes progressPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+</style>
+
+<!-- ====== JAVASCRIPT ====== -->
+<script>
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) { entry.target.classList.add('visible'); }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Nav scroll effect
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('nav');
+  if (window.scrollY > 50) { nav.classList.add('scrolled'); }
+  else { nav.classList.remove('scrolled'); }
+  lastScroll = window.scrollY;
+});
+
+// Counter animation
+function animateCounters() {
+  document.querySelectorAll('.number-value[data-count]').forEach(el => {
+    const target = parseInt(el.dataset.count);
+    const duration = 2000;
+    const start = performance.now();
+    function tick(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(target * eased).toLocaleString();
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
+}
+
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) { animateCounters(); counterObserver.disconnect(); }
+  });
+}, { threshold: 0.3 });
+const numSection = document.querySelector('.numbers-section');
+if (numSection) counterObserver.observe(numSection);
+
+// Proof bar counters
+function animateProofCounters() {
+  document.querySelectorAll('.counter').forEach(el => {
+    const target = parseInt(el.dataset.target);
+    const duration = 1500;
+    const start = performance.now();
+    function tick(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(target * eased).toLocaleString();
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
+}
+const proofObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) { animateProofCounters(); proofObserver.disconnect(); }
+  });
+}, { threshold: 0.3 });
+const proofBar = document.querySelector('.proof-bar');
+if (proofBar) proofObserver.observe(proofBar);
+
+// Demo tabs
+function switchDemoTab(index) {
+  document.querySelectorAll('.demo-tab').forEach((t, i) => t.classList.toggle('active', i === index));
+  document.querySelectorAll('.demo-content').forEach((c, i) => c.classList.toggle('active', i === index));
+}
+
+// Audience tabs
+function switchAudienceTab(index) {
+  document.querySelectorAll('.audience-tab').forEach((t, i) => t.classList.toggle('active', i === index));
+  document.querySelectorAll('.audience-panel').forEach((p, i) => p.classList.toggle('active', i === index));
+}
+
+// Smooth scroll
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Live feed cycling
+const feedMessages = [
+  { icon: '&#10003;', text: 'Sofia Garcia — Ch. 33 certified, 15 units, full-time', color: 'var(--green)' },
+  { icon: '&#9881;', text: 'David Kim — Running WEAMS match (confidence: HIGH)', color: 'var(--blue-light)' },
+  { icon: '&#10003;', text: 'T&F batch — 8 students submitted to VA', color: 'var(--green)' },
+  { icon: '&#9888;', text: 'Lisa Chen — Amendment: reduced enrollment (post add/drop)', color: 'var(--orange)' },
+  { icon: '&#10003;', text: 'Marcus Brown — Graduation amendment generated', color: 'var(--green)' },
+  { icon: '&#9881;', text: 'Ethan Moore — Program change detected: BA→BS', color: 'var(--blue-light)' },
+  { icon: '&#10003;', text: 'Sarah Williams — VA confirmed receipt (GUID: a4f2...)', color: 'var(--green)' },
+];
+let feedIndex = 0;
+setInterval(() => {
+  const feed = document.getElementById('liveFeed');
+  if (!feed) return;
+  const msg = feedMessages[feedIndex % feedMessages.length];
+  const item = document.createElement('div');
+  item.className = 'feed-item';
+  item.style.borderLeftColor = msg.color;
+  item.style.opacity = '0';
+  item.style.transform = 'translateX(-20px)';
+  item.style.animation = 'none';
+  item.innerHTML = '<span class="feed-icon">' + msg.icon + '</span><span class="feed-text">' + msg.text + '</span><span class="feed-time">just now</span>';
+  feed.insertBefore(item, feed.firstChild);
+  requestAnimationFrame(() => {
+    item.style.transition = 'all 0.4s ease';
+    item.style.opacity = '1';
+    item.style.transform = 'translateX(0)';
+  });
+  if (feed.children.length > 5) feed.removeChild(feed.lastChild);
+  feedIndex++;
+}, 4000);
+</script>
+
+</body>
+</html>

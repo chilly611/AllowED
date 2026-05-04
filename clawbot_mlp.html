@@ -1,0 +1,1616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClawBot v0.1 — VA Certification Automation</title>
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Embedded data for SCO/Admin view -->
+  <script id="embedded-data" type="application/json">
+{
+  "students": [
+    {
+      "id": "SID-001",
+      "name": "Daniel Bahena",
+      "studentId": "SID-001",
+      "program": "B.A. Journalism",
+      "chapter": "Ch.33",
+      "institution": "SDSU",
+      "status": "certified",
+      "weamsProgram": "BA JOURNALISM",
+      "weamsMatched": true,
+      "weamsConfidence": 1.0,
+      "courses": [
+        {
+          "courseId": "JOUR 301",
+          "title": "Reporting and Writing",
+          "units": 3.0,
+          "inDARs": true,
+          "modality": "Residential",
+          "certifiable": true,
+          "exclusionReason": ""
+        },
+        {
+          "courseId": "JOUR 350",
+          "title": "Digital Media Production",
+          "units": 3.0,
+          "inDARs": true,
+          "modality": "Residential",
+          "certifiable": true,
+          "exclusionReason": ""
+        },
+        {
+          "courseId": "JOUR 400",
+          "title": "Ethics in Journalism",
+          "units": 3.0,
+          "inDARs": true,
+          "modality": "Residential",
+          "certifiable": true,
+          "exclusionReason": ""
+        },
+        {
+          "courseId": "COMM 200",
+          "title": "Communication Theory",
+          "units": 3.0,
+          "inDARs": true,
+          "modality": "Residential",
+          "certifiable": true,
+          "exclusionReason": ""
+        }
+      ],
+      "certifiableUnits": 12.0,
+      "residentialUnits": 12.0,
+      "distanceUnits": 0,
+      "trainingTime": "Full-Time",
+      "rateOfPursuit": 1.0,
+      "flags": [],
+      "scoQueueItems": [],
+      "emStatus": "ready",
+      "amendment": null
+    },
+    {
+      "id": "SID-003",
+      "name": "James Chen",
+      "studentId": "SID-003",
+      "program": "M.C.P. City Planning",
+      "chapter": "Ch.33",
+      "institution": "SDSU",
+      "status": "certified",
+      "weamsProgram": "MCP CITY PLANNING",
+      "weamsMatched": true,
+      "weamsConfidence": 1.0,
+      "courses": [
+        {
+          "courseId": "CP 501",
+          "title": "Urban Planning Theory",
+          "units": 3.0,
+          "inDARs": true,
+          "modality": "Residential",
+          "certifiable": true,
+          "exclusionReason": ""
+        },
+        {
+          "courseId": "CP 520",
+          "title": "Planning Methods",
+          "units": 3.0,
+          "inDARs": true,
+          "modality": "Residential",
+          "certifiable": true,
+          "exclusionReason": ""
+        },
+        {
+          "courseId": "CP 799A",
+          "title": "Thesis",
+          "units": 3.0,
+          "inDARs": true,
+          "modality": "Distance",
+          "certifiable": true,
+          "exclusionReason": ""
+        }
+      ],
+      "certifiableUnits": 9.0,
+      "residentialUnits": 6.0,
+      "distanceUnits": 3.0,
+      "trainingTime": "Full-Time",
+      "rateOfPursuit": 1.0,
+      "flags": [],
+      "scoQueueItems": [],
+      "emStatus": "ready",
+      "amendment": null
+    },
+    {
+      "id": "SID-006",
+      "name": "Lisa Nguyen",
+      "studentId": "SID-006",
+      "program": "M.A. Comparative World Literature",
+      "chapter": "Ch.33",
+      "institution": "CSUN",
+      "status": "pending_review",
+      "weamsProgram": "MA ENGLISH-LITERATURE",
+      "weamsMatched": true,
+      "weamsConfidence": 0.85,
+      "courses": [
+        {
+          "courseId": "ENG 501",
+          "title": "American Literature Seminar",
+          "units": 3.0,
+          "inDARs": true,
+          "modality": "Residential",
+          "certifiable": true,
+          "exclusionReason": ""
+        },
+        {
+          "courseId": "ENG 520",
+          "title": "Literary Theory",
+          "units": 3.0,
+          "inDARs": true,
+          "modality": "Residential",
+          "certifiable": true,
+          "exclusionReason": ""
+        },
+        {
+          "courseId": "ENG 540",
+          "title": "British Literature Research",
+          "units": 3.0,
+          "inDARs": true,
+          "modality": "Distance",
+          "certifiable": true,
+          "exclusionReason": ""
+        }
+      ],
+      "certifiableUnits": 9.0,
+      "residentialUnits": 6.0,
+      "distanceUnits": 3.0,
+      "trainingTime": "Full-Time",
+      "rateOfPursuit": 1.0,
+      "flags": [
+        "WEAMS crosswalk confidence below 95%",
+        "Confidence score below 90%"
+      ],
+      "scoQueueItems": [],
+      "emStatus": "draft",
+      "amendment": null
+    },
+    {
+      "id": "SID-002",
+      "name": "Maria Garcia",
+      "studentId": "SID-002",
+      "program": "B.S. Computer Science",
+      "chapter": "Ch.35",
+      "institution": "SDSU",
+      "status": "pending_review",
+      "weamsProgram": "BS COMPUTER SCIENCE",
+      "weamsMatched": true,
+      "weamsConfidence": 0.9,
+      "courses": [
+        {
+          "courseId": "CS 301",
+          "title": "Data Structures",
+          "units": 3.0,
+          "inDARs": true,
+          "modality": "Residential",
+          "certifiable": true,
+          "exclusionReason": ""
+        },
+        {
+          "courseId": "CS 310",
+          "title": "Database Systems",
+          "units": 4.0,
+          "inDARs": true,
+          "modality": "Residential",
+          "certifiable": true,
+          "exclusionReason": ""
+        },
+        {
+          "courseId": "MATH 150",
+          "title": "Calculus Review (Audit)",
+          "units": 0.0,
+          "inDARs": false,
+          "modality": "In-Person",
+          "certifiable": false,
+          "exclusionReason": "Course not required for degree per DARS"
+        },
+        {
+          "courseId": "CS 250",
+          "title": "Intro to Programming (repeat)",
+          "units": 3.0,
+          "inDARs": true,
+          "modality": "In-Person",
+          "certifiable": false,
+          "exclusionReason": "Repeat of previously passed course \u2014 SCO review required"
+        },
+        {
+          "courseId": "PHIL 332",
+          "title": "Ethics in Technology (substitution)",
+          "units": 3.0,
+          "inDARs": true,
+          "modality": "In-Person",
+          "certifiable": false,
+          "exclusionReason": "Routed to SCO exception queue"
+        }
+      ],
+      "certifiableUnits": 7.0,
+      "residentialUnits": 7.0,
+      "distanceUnits": 0,
+      "trainingTime": "Half-Time",
+      "rateOfPursuit": 0.5833333333333334,
+      "flags": [
+        "Courses in SCO exception queue"
+      ],
+      "scoQueueItems": [
+        "PHIL 332: Not in DARS. SCO exception (course_substitution) requires manual review."
+      ],
+      "emStatus": "draft",
+      "amendment": null
+    },
+    {
+      "id": "SID-005",
+      "name": "Robert Torres",
+      "studentId": "SID-005",
+      "program": "B.S. Civil Engineering",
+      "chapter": "Ch.31",
+      "institution": "CSUN",
+      "status": "amendment_pending",
+      "weamsProgram": "BS CIVIL ENGINEERING",
+      "weamsMatched": true,
+      "weamsConfidence": 1.0,
+      "courses": [
+        {
+          "courseId": "CE 310",
+          "title": "Structural Analysis",
+          "units": 4.0,
+          "inDARs": true,
+          "modality": "Residential",
+          "certifiable": true,
+          "exclusionReason": ""
+        },
+        {
+          "courseId": "CE 330",
+          "title": "Hydraulics and Water Resources",
+          "units": 3.0,
+          "inDARs": true,
+          "modality": "Residential",
+          "certifiable": true,
+          "exclusionReason": ""
+        },
+        {
+          "courseId": "CE 410",
+          "title": "Transportation Engineering",
+          "units": 3.0,
+          "inDARs": true,
+          "modality": "Residential",
+          "certifiable": true,
+          "exclusionReason": ""
+        }
+      ],
+      "certifiableUnits": 10.0,
+      "residentialUnits": 10.0,
+      "distanceUnits": 0,
+      "trainingTime": "Three-Quarter",
+      "rateOfPursuit": 0.8333333333333334,
+      "flags": [],
+      "scoQueueItems": [],
+      "emStatus": "ready",
+      "amendment": {
+        "oldCertifiableUnits": 10.0,
+        "newCertifiableUnits": 7.0,
+        "oldTrainingTime": "Three Quarter",
+        "newTrainingTime": "Half Time",
+        "changedCourse": "CE 410",
+        "changeDescription": "Pre-registered but reduced"
+      }
+    },
+    {
+      "id": "SID-004",
+      "name": "Sarah Kim",
+      "studentId": "SID-004",
+      "program": "B.A. Psychology",
+      "chapter": "Ch.33",
+      "institution": "CSUN",
+      "status": "certified",
+      "weamsProgram": "BA PSYCHOLOGY",
+      "weamsMatched": true,
+      "weamsConfidence": 1.0,
+      "courses": [
+        {
+          "courseId": "PSY 310",
+          "title": "Developmental Psychology",
+          "units": 3.0,
+          "inDARs": true,
+          "modality": "Residential",
+          "certifiable": true,
+          "exclusionReason": ""
+        },
+        {
+          "courseId": "PSY 380",
+          "title": "Research Methods",
+          "units": 4.0,
+          "inDARs": true,
+          "modality": "Residential",
+          "certifiable": true,
+          "exclusionReason": ""
+        },
+        {
+          "courseId": "PSY 450",
+          "title": "Abnormal Psychology",
+          "units": 3.0,
+          "inDARs": true,
+          "modality": "Residential",
+          "certifiable": true,
+          "exclusionReason": ""
+        }
+      ],
+      "certifiableUnits": 10.0,
+      "residentialUnits": 10.0,
+      "distanceUnits": 0,
+      "trainingTime": "Three-Quarter",
+      "rateOfPursuit": 0.8333333333333334,
+      "flags": [],
+      "scoQueueItems": [],
+      "emStatus": "ready",
+      "amendment": null
+    }
+  ],
+  "auditLog": [
+    {
+      "timestamp": "2026-04-10 09:00",
+      "action": "System startup \u2014 6 students loaded from PeopleSoft",
+      "user": "ClawBot"
+    },
+    {
+      "timestamp": "2026-04-10 09:01",
+      "action": "Daniel Bahena \u2014 auto-certified (4/4 courses clean)",
+      "user": "ClawBot"
+    },
+    {
+      "timestamp": "2026-04-10 09:01",
+      "action": "James Chen \u2014 auto-certified (3/3 courses + thesis)",
+      "user": "ClawBot"
+    },
+    {
+      "timestamp": "2026-04-10 09:01",
+      "action": "Sarah Kim \u2014 auto-certified (3/3 courses clean)",
+      "user": "ClawBot"
+    },
+    {
+      "timestamp": "2026-04-10 09:02",
+      "action": "Maria Garcia \u2014 flagged: 1 course in SCO exception queue (PHIL 332 substitution)",
+      "user": "ClawBot"
+    },
+    {
+      "timestamp": "2026-04-10 09:02",
+      "action": "Lisa Nguyen \u2014 flagged: WEAMS confidence 82% (below 95% threshold)",
+      "user": "ClawBot"
+    },
+    {
+      "timestamp": "2026-04-10 09:03",
+      "action": "Robert Torres \u2014 amendment detected: CE 410 dropped, training time reduced",
+      "user": "ClawBot"
+    }
+  ]
+}
+  </script>
+
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      padding: 0.375rem 0.75rem;
+      border-radius: 0.375rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .status-certified {
+      background-color: #dffcf0;
+      color: #00a91c;
+      border: 1px solid #00a91c;
+    }
+
+    .status-pending {
+      background-color: #fff3cd;
+      color: #e5a000;
+      border: 1px solid #e5a000;
+    }
+
+    .status-flagged {
+      background-color: #fadbd8;
+      color: #d54309;
+      border: 1px solid #d54309;
+    }
+
+    .status-amendment {
+      background-color: #d1ecf1;
+      color: #0c5460;
+      border: 1px solid #0c5460;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 0.5rem;
+      max-height: 90vh;
+      overflow-y: auto;
+      width: 90%;
+      max-width: 800px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background-color: #e5e7eb;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 0.5rem 0;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #1a4480 0%, #005ea2 100%);
+      transition: width 0.3s ease;
+    }
+
+    .role-indicator {
+      display: inline-block;
+      background-color: #1a4480;
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin-left: 1rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background-color: #f3f4f6;
+      border: 1px solid #d1d5db;
+      padding: 0.75rem;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+
+    td {
+      border: 1px solid #d1d5db;
+      padding: 0.75rem;
+      font-size: 0.875rem;
+    }
+
+    tr:hover {
+      background-color: #f9fafb;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    // Detect embedded data
+    const _rawEmbed = document.getElementById("embedded-data").textContent.trim();
+    const EMBEDDED = (_rawEmbed.length > 5 && _rawEmbed.charAt(0) === "{") ? JSON.parse(_rawEmbed) : null;
+
+    // Main App
+    function ClawBotApp() {
+      const [role, setRole] = useState("student");
+
+      const handleRoleSwitch = (newRole) => {
+        setRole(newRole);
+      };
+
+      return (
+        <div className="min-h-screen bg-gray-100">
+          <Header role={role} onRoleSwitch={handleRoleSwitch} />
+          {role === "student" ? <StudentView /> : <AdminView data={EMBEDDED} />}
+        </div>
+      );
+    }
+
+    // Header with role switcher
+    function Header({ role, onRoleSwitch }) {
+      return (
+        <header className="bg-white border-b border-gray-300 shadow-sm">
+          <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div className="flex items-center">
+              <h1 className="text-2xl font-bold" style={{ color: "#1a4480" }}>
+                ClawBot v0.1
+              </h1>
+              <span className="role-indicator">{role === "student" ? "STUDENT" : "SCO ADMIN"}</span>
+            </div>
+
+            <div className="flex gap-2">
+              <button
+                onClick={() => onRoleSwitch("student")}
+                className={`px-4 py-2 rounded font-medium transition ${
+                  role === "student"
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                }`}
+              >
+                Student
+              </button>
+              <button
+                onClick={() => onRoleSwitch("admin")}
+                className={`px-4 py-2 rounded font-medium transition ${
+                  role === "admin"
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                }`}
+              >
+                SCO Admin
+              </button>
+            </div>
+          </div>
+        </header>
+      );
+    }
+
+    // STUDENT VIEW
+    function StudentView() {
+      const [formData, setFormData] = useState({
+        name: "",
+        studentId: "",
+        program: "B.A. Journalism",
+        chapter: "Ch.33",
+        institution: "SDSU",
+        courses: [{ courseId: "", title: "", units: 3, inDARs: true, modality: "In-Person" }]
+      });
+
+      const [results, setResults] = useState(null);
+      const [processing, setProcessing] = useState(false);
+      const [progress, setProgress] = useState(0);
+
+      const programOptions = [
+        "B.A. Journalism",
+        "B.S. Computer Science",
+        "M.C.P. City Planning",
+        "B.A. Psychology",
+        "B.S. Civil Engineering",
+        "M.A. Comparative World Literature"
+      ];
+
+      const handleLoadDemo = () => {
+        setFormData({
+          name: "Daniel Bahena",
+          studentId: "SID-001",
+          program: "B.A. Journalism",
+          chapter: "Ch.33",
+          institution: "SDSU",
+          courses: [
+            { courseId: "JOUR 301", title: "Reporting and Writing", units: 3, inDARs: true, modality: "In-Person" },
+            { courseId: "JOUR 350", title: "Digital Media Production", units: 3, inDARs: true, modality: "In-Person" },
+            { courseId: "JOUR 400", title: "Ethics in Journalism", units: 3, inDARs: true, modality: "In-Person" },
+            { courseId: "COMM 200", title: "Communication Theory", units: 3, inDARs: true, modality: "In-Person" }
+          ]
+        });
+        setResults(null);
+      };
+
+      const handleInputChange = (field, value) => {
+        setFormData({ ...formData, [field]: value });
+      };
+
+      const handleCourseChange = (index, field, value) => {
+        const newCourses = [...formData.courses];
+        newCourses[index] = { ...newCourses[index], [field]: value };
+        setFormData({ ...formData, courses: newCourses });
+      };
+
+      const handleAddCourse = () => {
+        if (formData.courses.length < 6) {
+          setFormData({
+            ...formData,
+            courses: [...formData.courses, { courseId: "", title: "", units: 3, inDARs: true, modality: "In-Person" }]
+          });
+        }
+      };
+
+      const handleRemoveCourse = (index) => {
+        setFormData({
+          ...formData,
+          courses: formData.courses.filter((_, i) => i !== index)
+        });
+      };
+
+      const simulateProcessing = () => {
+        setProcessing(true);
+        setProgress(0);
+
+        const steps = [
+          { label: "Matching WEAMS program...", duration: 400 },
+          { label: "Evaluating courses...", duration: 400 },
+          { label: "Calculating training time...", duration: 400 },
+          { label: "Generating result...", duration: 300 }
+        ];
+
+        let totalTime = 0;
+        steps.forEach(step => {
+          totalTime += step.duration;
+          setTimeout(() => {
+            setProgress(prev => Math.min(prev + 25, 100));
+          }, totalTime);
+        });
+
+        setTimeout(() => {
+          const result = evaluateStudentCertification(formData);
+          setResults(result);
+          setProcessing(false);
+        }, totalTime);
+      };
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!formData.name || !formData.studentId || formData.courses.length === 0) {
+          alert("Please fill in all required fields and add at least one course.");
+          return;
+        }
+        simulateProcessing();
+      };
+
+      if (results) {
+        return <StudentStatusView results={results} onSubmitAnother={() => setResults(null)} />;
+      }
+
+      return (
+        <div className="max-w-4xl mx-auto px-4 py-8">
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-xl font-bold mb-6" style={{ color: "#1a4480" }}>
+              VA Certification Intake Form
+            </h2>
+
+            {processing && (
+              <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded">
+                <div className="text-sm font-medium text-blue-900 mb-2">Processing your certification...</div>
+                <div className="progress-bar">
+                  <div className="progress-fill" style={{ width: `${progress}%` }}></div>
+                </div>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Student Info */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2 text-gray-700">Name *</label>
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => handleInputChange("name", e.target.value)}
+                    disabled={processing}
+                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 disabled:bg-gray-100"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2 text-gray-700">Student ID *</label>
+                  <input
+                    type="text"
+                    value={formData.studentId}
+                    onChange={(e) => handleInputChange("studentId", e.target.value)}
+                    disabled={processing}
+                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 disabled:bg-gray-100"
+                  />
+                </div>
+              </div>
+
+              {/* Program, Chapter, Institution */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2 text-gray-700">Program *</label>
+                  <select
+                    value={formData.program}
+                    onChange={(e) => handleInputChange("program", e.target.value)}
+                    disabled={processing}
+                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 disabled:bg-gray-100"
+                  >
+                    {programOptions.map(prog => (
+                      <option key={prog} value={prog}>{prog}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2 text-gray-700">Benefit Chapter *</label>
+                  <select
+                    value={formData.chapter}
+                    onChange={(e) => handleInputChange("chapter", e.target.value)}
+                    disabled={processing}
+                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 disabled:bg-gray-100"
+                  >
+                    <option>Ch.33</option>
+                    <option>Ch.35</option>
+                    <option>Ch.31</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2 text-gray-700">Institution *</label>
+                  <select
+                    value={formData.institution}
+                    onChange={(e) => handleInputChange("institution", e.target.value)}
+                    disabled={processing}
+                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 disabled:bg-gray-100"
+                  >
+                    <option>SDSU</option>
+                    <option>CSUN</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Courses */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4" style={{ color: "#1a4480" }}>Courses ({formData.courses.length}/6)</h3>
+                <div className="space-y-4">
+                  {formData.courses.map((course, idx) => (
+                    <div key={idx} className="border border-gray-200 rounded p-4 bg-gray-50">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
+                        <div>
+                          <label className="block text-sm font-medium mb-1 text-gray-700">Course ID</label>
+                          <input
+                            type="text"
+                            placeholder="e.g. JOUR 301"
+                            value={course.courseId}
+                            onChange={(e) => handleCourseChange(idx, "courseId", e.target.value)}
+                            disabled={processing}
+                            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 disabled:bg-gray-100 text-sm"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium mb-1 text-gray-700">Title</label>
+                          <input
+                            type="text"
+                            placeholder="e.g. Reporting and Writing"
+                            value={course.title}
+                            onChange={(e) => handleCourseChange(idx, "title", e.target.value)}
+                            disabled={processing}
+                            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 disabled:bg-gray-100 text-sm"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium mb-1 text-gray-700">Units</label>
+                          <input
+                            type="number"
+                            value={course.units}
+                            onChange={(e) => handleCourseChange(idx, "units", parseInt(e.target.value))}
+                            disabled={processing}
+                            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 disabled:bg-gray-100 text-sm"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="flex items-center">
+                          <input
+                            type="checkbox"
+                            id={`dars-${idx}`}
+                            checked={course.inDARs}
+                            onChange={(e) => handleCourseChange(idx, "inDARs", e.target.checked)}
+                            disabled={processing}
+                            className="mr-2"
+                          />
+                          <label htmlFor={`dars-${idx}`} className="text-sm text-gray-700 cursor-pointer">
+                            In DARS
+                          </label>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium mb-1 text-gray-700">Modality</label>
+                          <select
+                            value={course.modality}
+                            onChange={(e) => handleCourseChange(idx, "modality", e.target.value)}
+                            disabled={processing}
+                            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 disabled:bg-gray-100 text-sm"
+                          >
+                            <option>In-Person</option>
+                            <option>Online</option>
+                            <option>Hybrid</option>
+                          </select>
+                        </div>
+                        {formData.courses.length > 1 && (
+                          <div className="flex items-end">
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveCourse(idx)}
+                              disabled={processing}
+                              className="w-full px-3 py-2 bg-red-100 text-red-700 rounded hover:bg-red-200 disabled:opacity-50 text-sm font-medium"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {formData.courses.length < 6 && (
+                  <button
+                    type="button"
+                    onClick={handleAddCourse}
+                    disabled={processing}
+                    className="mt-4 px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 disabled:opacity-50 font-medium text-sm"
+                  >
+                    + Add Course
+                  </button>
+                )}
+              </div>
+
+              {/* Buttons */}
+              <div className="flex gap-4 pt-4 border-t border-gray-200">
+                <button
+                  type="button"
+                  onClick={handleLoadDemo}
+                  disabled={processing}
+                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 disabled:opacity-50 font-medium"
+                >
+                  Load Demo Student
+                </button>
+                <button
+                  type="submit"
+                  disabled={processing}
+                  className="px-6 py-2 rounded font-medium text-white transition disabled:opacity-50"
+                  style={{ backgroundColor: processing ? "#888" : "#1a4480" }}
+                >
+                  {processing ? "Processing..." : "Run Certification Check"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      );
+    }
+
+    // Student Status View
+    function StudentStatusView({ results, onSubmitAnother }) {
+      const statusColor =
+        results.status === "certified" ? "#00a91c" :
+        results.status === "pending" ? "#e5a000" :
+        "#d54309";
+
+      const statusText =
+        results.status === "certified" ? "Ready for Certification" :
+        results.status === "pending" ? "Pending SCO Review" :
+        "Needs Action";
+
+      return (
+        <div className="max-w-4xl mx-auto px-4 py-8">
+          {/* Status Header */}
+          <div className="rounded-lg p-6 text-white mb-6" style={{ backgroundColor: statusColor }}>
+            <h2 className="text-2xl font-bold mb-2">
+              {results.name} — {results.program}
+            </h2>
+            <p className="mb-4">Student ID: {results.studentId} | {results.institution} | {results.chapter}</p>
+            <span className="status-badge" style={{
+              backgroundColor: "rgba(255,255,255,0.3)",
+              color: "white",
+              border: "1px solid white"
+            }}>
+              {statusText}
+            </span>
+          </div>
+
+          {/* Certification Summary */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div className="bg-white rounded-lg p-4 shadow border-l-4" style={{ borderLeftColor: "#005ea2" }}>
+              <div className="text-xs font-bold text-gray-500 uppercase">Certifiable Units</div>
+              <div className="text-3xl font-bold" style={{ color: "#1a4480" }}>{results.certifiableUnits}</div>
+            </div>
+            <div className="bg-white rounded-lg p-4 shadow border-l-4" style={{ borderLeftColor: "#005ea2" }}>
+              <div className="text-xs font-bold text-gray-500 uppercase">Residential / Distance</div>
+              <div className="text-2xl font-bold" style={{ color: "#1a4480" }}>{results.residentialUnits} / {results.distanceUnits}</div>
+            </div>
+            <div className="bg-white rounded-lg p-4 shadow border-l-4" style={{ borderLeftColor: "#005ea2" }}>
+              <div className="text-xs font-bold text-gray-500 uppercase">Training Time</div>
+              <div className="text-xl font-bold" style={{ color: "#1a4480" }}>{results.trainingTime}</div>
+            </div>
+            <div className="bg-white rounded-lg p-4 shadow border-l-4" style={{ borderLeftColor: "#005ea2" }}>
+              <div className="text-xs font-bold text-gray-500 uppercase">Rate of Pursuit</div>
+              <div className="text-2xl font-bold" style={{ color: "#1a4480" }}>{results.rateOfPursuit.toFixed(2)}</div>
+            </div>
+          </div>
+
+          {/* Processing Note */}
+          <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 rounded">
+            <p className="text-sm text-blue-800">
+              <strong>Processed in 1.4 seconds</strong> — manual certification typically takes 20-45 minutes per student.
+            </p>
+          </div>
+
+          {/* Flags */}
+          {results.flags.length > 0 && (
+            <div className="mb-6 space-y-2">
+              {results.flags.map((flag, idx) => (
+                <div key={idx} className="bg-yellow-50 border-l-4 border-yellow-400 p-3 rounded">
+                  <p className="text-sm text-yellow-800">{flag}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Course Breakdown */}
+          <div className="bg-white rounded-lg shadow p-6 mb-6">
+            <h3 className="text-lg font-bold mb-4" style={{ color: "#1a4480" }}>Course Breakdown</h3>
+            <div className="overflow-x-auto">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Course ID</th>
+                    <th>Title</th>
+                    <th>Units</th>
+                    <th>Certifiable</th>
+                    <th>Modality</th>
+                    <th>Reason (if excluded)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {results.courses.map((course, idx) => (
+                    <tr key={idx}>
+                      <td className="font-medium">{course.courseId}</td>
+                      <td>{course.title}</td>
+                      <td>{course.units}</td>
+                      <td className="text-center font-bold" style={{ color: course.certifiable ? "#00a91c" : "#d54309" }}>
+                        {course.certifiable ? "✓" : "✗"}
+                      </td>
+                      <td>{course.modality}</td>
+                      <td className="text-gray-600">
+                        {course.exclusionReason || "-"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* WEAMS Match */}
+          <div className="bg-white rounded-lg shadow p-6 mb-6">
+            <h3 className="text-lg font-bold mb-3" style={{ color: "#1a4480" }}>WEAMS Program Match</h3>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-gray-700">{results.program}</span>
+              <span className="status-badge" style={{
+                backgroundColor: "#dffcf0",
+                color: "#00a91c",
+                border: "1px solid #00a91c"
+              }}>
+                HIGH CONFIDENCE
+              </span>
+            </div>
+          </div>
+
+          {/* Submit Another Button */}
+          <button
+            onClick={onSubmitAnother}
+            className="px-6 py-3 rounded font-medium text-white"
+            style={{ backgroundColor: "#1a4480" }}
+          >
+            Submit Another Student
+          </button>
+        </div>
+      );
+    }
+
+    // ADMIN VIEW
+    function AdminView({ data }) {
+      const [institution, setInstitution] = useState("ALL");
+      const [activeTab, setActiveTab] = useState("queue");
+      const [selectedStudent, setSelectedStudent] = useState(null);
+      const [sortConfig, setSortConfig] = useState({ key: "name", direction: "asc" });
+
+      if (!data) {
+        return (
+          <div className="max-w-4xl mx-auto px-4 py-8">
+            <div className="bg-white rounded-lg shadow p-6">
+              <p className="text-gray-700">No data loaded. Please include embedded JSON data to use Admin view.</p>
+            </div>
+          </div>
+        );
+      }
+
+      const filteredStudents = institution === "ALL" ? data.students : data.students.filter(s => s.institution === institution);
+      const queueStudents = filteredStudents.filter(s => s.status === "pending_review" || s.status === "amendment_pending");
+      const certifiedCount = filteredStudents.filter(s => s.status === "certified").length;
+      const pendingCount = filteredStudents.filter(s => s.status === "pending_review").length;
+      const amendmentCount = filteredStudents.filter(s => s.status === "amendment_pending").length;
+
+      const sorted = (arr) => {
+        return [...arr].sort((a, b) => {
+          const aVal = a[sortConfig.key];
+          const bVal = b[sortConfig.key];
+          if (aVal < bVal) return sortConfig.direction === "asc" ? -1 : 1;
+          if (aVal > bVal) return sortConfig.direction === "asc" ? 1 : -1;
+          return 0;
+        });
+      };
+
+      return (
+        <div className="max-w-6xl mx-auto px-4 py-8">
+          {/* Stats Bar */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <div className="bg-white rounded-lg shadow p-4 border-t-4" style={{ borderTopColor: "#71767a" }}>
+              <div className="text-xs font-bold text-gray-500 uppercase">Total Students</div>
+              <div className="text-3xl font-bold" style={{ color: "#1a4480" }}>{filteredStudents.length}</div>
+            </div>
+            <div className="bg-white rounded-lg shadow p-4 border-t-4" style={{ borderTopColor: "#00a91c" }}>
+              <div className="text-xs font-bold text-green-600 uppercase">Certified</div>
+              <div className="text-3xl font-bold text-green-600">{certifiedCount}</div>
+            </div>
+            <div className="bg-white rounded-lg shadow p-4 border-t-4" style={{ borderTopColor: "#e5a000" }}>
+              <div className="text-xs font-bold text-amber-600 uppercase">Pending Review</div>
+              <div className="text-3xl font-bold text-amber-600">{pendingCount}</div>
+            </div>
+            <div className="bg-white rounded-lg shadow p-4 border-t-4" style={{ borderTopColor: "#0c5460" }}>
+              <div className="text-xs font-bold text-cyan-700 uppercase">Amendments</div>
+              <div className="text-3xl font-bold text-cyan-700">{amendmentCount}</div>
+            </div>
+          </div>
+
+          {/* Institution Toggle */}
+          <div className="bg-white rounded-lg shadow p-4 mb-6 flex items-center gap-4">
+            <label className="font-medium text-gray-700">Institution:</label>
+            <select
+              value={institution}
+              onChange={(e) => setInstitution(e.target.value)}
+              className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+            >
+              <option value="ALL">All Campuses</option>
+              <option value="SDSU">SDSU</option>
+              <option value="CSUN">CSUN</option>
+            </select>
+          </div>
+
+          {/* Tab Navigation */}
+          <div className="bg-white rounded-t-lg shadow-sm border-b border-gray-200 flex">
+            {[
+              { key: "queue", label: "Queue" },
+              { key: "all", label: "All Students" },
+              { key: "amendments", label: "Amendments" },
+              { key: "audit", label: "Audit Log" }
+            ].map(tab => (
+              <button
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key)}
+                className={`px-6 py-4 font-medium border-b-2 transition ${
+                  activeTab === tab.key
+                    ? "border-blue-600 text-blue-600"
+                    : "border-transparent text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Tab Content */}
+          <div className="bg-white rounded-b-lg shadow-sm p-6">
+            {activeTab === "queue" && (
+              <QueueTab students={queueStudents} onSelectStudent={setSelectedStudent} />
+            )}
+            {activeTab === "all" && (
+              <AllStudentsTab students={sorted(filteredStudents)} sortConfig={sortConfig} setSortConfig={setSortConfig} onSelectStudent={setSelectedStudent} />
+            )}
+            {activeTab === "amendments" && (
+              <AmendmentsTab students={filteredStudents} onSelectStudent={setSelectedStudent} />
+            )}
+            {activeTab === "audit" && (
+              <AuditLogTab logs={data.auditLog} />
+            )}
+          </div>
+
+          {/* Student Detail Modal */}
+          {selectedStudent && (
+            <StudentDetailModal
+              student={selectedStudent}
+              onClose={() => setSelectedStudent(null)}
+            />
+          )}
+        </div>
+      );
+    }
+
+    // Queue Tab
+    function QueueTab({ students, onSelectStudent }) {
+      if (students.length === 0) {
+        return (
+          <div className="text-center py-8 text-gray-600">
+            <p>All students certified! No pending reviews.</p>
+          </div>
+        );
+      }
+
+      const certified = 6 - students.length;
+
+      return (
+        <div>
+          <div className="mb-4 p-3 bg-green-50 border-l-4 border-green-500 rounded text-sm text-green-800">
+            <strong>{certified} of 6 students auto-certified.</strong> {students.length} flagged for review. All flagged cases require human review.
+          </div>
+
+          <div className="mb-4 p-3 bg-blue-50 border-l-4 border-blue-500 rounded text-sm text-blue-800">
+            <strong>ClawBot never submits to the VA without SCO approval.</strong> Review the certification details before approving.
+          </div>
+
+          <div className="space-y-4">
+            {students.map(student => (
+              <div key={student.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <h4 className="font-bold text-lg">{student.name}</h4>
+                    <p className="text-sm text-gray-600 mb-2">
+                      {student.program} | {student.chapter} | {student.institution}
+                    </p>
+                    <div className="flex gap-4 text-sm">
+                      <span><strong>Certifiable Units:</strong> {student.certifiableUnits}</span>
+                      <span><strong>Training Time:</strong> {student.trainingTime}</span>
+                    </div>
+
+                    {student.scoQueueItems.length > 0 && (
+                      <div className="mt-3 space-y-1">
+                        {student.scoQueueItems.map((item, idx) => (
+                          <div key={idx} className="p-2 bg-red-50 border-l-2 border-red-500 text-sm text-red-700">
+                            {item}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => onSelectStudent(student)}
+                      className="px-4 py-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 font-medium text-sm"
+                    >
+                      Review
+                    </button>
+                    <button
+                      className="px-4 py-2 bg-green-100 text-green-700 rounded hover:bg-green-200 font-medium text-sm"
+                      disabled={student.scoQueueItems.length > 0}
+                    >
+                      Approve
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    // All Students Tab
+    function AllStudentsTab({ students, sortConfig, setSortConfig, onSelectStudent }) {
+      const toggleSort = (key) => {
+        setSortConfig({
+          key,
+          direction: sortConfig.key === key && sortConfig.direction === "asc" ? "desc" : "asc"
+        });
+      };
+
+      const getStatusClass = (status) => {
+        if (status === "certified") return "status-certified";
+        if (status === "pending_review") return "status-pending";
+        if (status === "amendment_pending") return "status-amendment";
+        return "";
+      };
+
+      const getStatusLabel = (status) => {
+        if (status === "certified") return "Certified";
+        if (status === "pending_review") return "Pending Review";
+        if (status === "amendment_pending") return "Amendment";
+        return status;
+      };
+
+      return (
+        <div className="overflow-x-auto">
+          <table>
+            <thead>
+              <tr>
+                <th onClick={() => toggleSort("name")} style={{ cursor: "pointer" }} className="hover:bg-gray-100">
+                  Name {sortConfig.key === "name" && (sortConfig.direction === "asc" ? "▲" : "▼")}
+                </th>
+                <th onClick={() => toggleSort("program")} style={{ cursor: "pointer" }} className="hover:bg-gray-100">
+                  Program {sortConfig.key === "program" && (sortConfig.direction === "asc" ? "▲" : "▼")}
+                </th>
+                <th>Chapter</th>
+                <th>Institution</th>
+                <th onClick={() => toggleSort("status")} style={{ cursor: "pointer" }} className="hover:bg-gray-100">
+                  Status {sortConfig.key === "status" && (sortConfig.direction === "asc" ? "▲" : "▼")}
+                </th>
+                <th onClick={() => toggleSort("certifiableUnits")} style={{ cursor: "pointer" }} className="hover:bg-gray-100">
+                  Units {sortConfig.key === "certifiableUnits" && (sortConfig.direction === "asc" ? "▲" : "▼")}
+                </th>
+                <th>R/D Split</th>
+                <th>Training Time</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {students.map(student => (
+                <tr key={student.id}>
+                  <td className="font-medium">{student.name}</td>
+                  <td>{student.program}</td>
+                  <td>{student.chapter}</td>
+                  <td>{student.institution}</td>
+                  <td>
+                    <span className={`status-badge ${getStatusClass(student.status)}`}>
+                      {getStatusLabel(student.status)}
+                    </span>
+                  </td>
+                  <td>{student.certifiableUnits}</td>
+                  <td>{student.residentialUnits}/{student.distanceUnits}</td>
+                  <td>{student.trainingTime}</td>
+                  <td>
+                    <button
+                      onClick={() => onSelectStudent(student)}
+                      className="text-blue-600 hover:underline font-medium text-sm"
+                    >
+                      Details
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+    }
+
+    // Amendments Tab
+    function AmendmentsTab({ students, onSelectStudent }) {
+      const amended = students.filter(s => s.amendment);
+
+      if (amended.length === 0) {
+        return (
+          <div className="text-center py-8 text-gray-600">
+            <p>No pending amendments.</p>
+          </div>
+        );
+      }
+
+      return (
+        <div className="space-y-4">
+          {amended.map(student => (
+            <div key={student.id} className="border-l-4 border-cyan-500 bg-cyan-50 rounded-lg p-4">
+              <h4 className="font-bold text-lg mb-2">{student.name}</h4>
+              {student.amendment && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <p className="text-sm text-gray-600">Old Certifiable Units</p>
+                    <p className="text-xl font-bold text-gray-900">{student.amendment.oldCertifiableUnits}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600">New Certifiable Units</p>
+                    <p className="text-xl font-bold text-cyan-700">{student.amendment.newCertifiableUnits}</p>
+                  </div>
+                </div>
+              )}
+              <p className="text-sm text-gray-700 mb-3">
+                <strong>Changed Course:</strong> {student.amendment.changedCourse}
+              </p>
+              <p className="text-sm text-gray-700 mb-4">
+                <strong>Reason:</strong> {student.amendment.changeDescription}
+              </p>
+              <button
+                onClick={() => onSelectStudent(student)}
+                className="px-4 py-2 bg-cyan-600 text-white rounded hover:bg-cyan-700 font-medium text-sm"
+              >
+                Review & Approve
+              </button>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    // Audit Log Tab
+    function AuditLogTab({ logs }) {
+      return (
+        <div className="space-y-3">
+          {logs.map((log, idx) => (
+            <div key={idx} className="border-l-4 border-gray-400 pl-4 py-2">
+              <p className="text-sm font-mono text-gray-500">{log.timestamp}</p>
+              <p className="font-medium text-gray-900">{log.action}</p>
+              <p className="text-sm text-gray-600">by {log.user}</p>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    // Student Detail Modal
+    function StudentDetailModal({ student, onClose }) {
+      const getStatusColor = (status) => {
+        if (status === "certified") return "#00a91c";
+        if (status === "pending_review") return "#e5a000";
+        if (status === "amendment_pending") return "#0c5460";
+        return "#d54309";
+      };
+
+      const getStatusLabel = (status) => {
+        if (status === "certified") return "Certified";
+        if (status === "pending_review") return "Pending Review";
+        if (status === "amendment_pending") return "Amendment Pending";
+        return "Flagged";
+      };
+
+      return (
+        <div className="modal-overlay" onClick={onClose}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            {/* Header */}
+            <div className="p-6 border-b border-gray-200" style={{ backgroundColor: getStatusColor(student.status) }}>
+              <div className="flex items-start justify-between">
+                <div className="text-white">
+                  <h2 className="text-2xl font-bold">{student.name}</h2>
+                  <p className="text-white text-opacity-90">{student.program}</p>
+                </div>
+                <button
+                  onClick={onClose}
+                  className="text-white text-2xl hover:opacity-70 font-light"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+
+            {/* Body */}
+            <div className="p-6 space-y-6">
+              {/* Basic Info */}
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <p className="text-gray-600 font-medium">Student ID</p>
+                  <p className="font-mono">{student.studentId}</p>
+                </div>
+                <div>
+                  <p className="text-gray-600 font-medium">Institution</p>
+                  <p>{student.institution}</p>
+                </div>
+                <div>
+                  <p className="text-gray-600 font-medium">Benefit Chapter</p>
+                  <p>{student.chapter}</p>
+                </div>
+                <div>
+                  <p className="text-gray-600 font-medium">Status</p>
+                  <span className="status-badge" style={{
+                    backgroundColor: getStatusColor(student.status) + "20",
+                    color: getStatusColor(student.status),
+                    border: `1px solid ${getStatusColor(student.status)}`
+                  }}>
+                    {getStatusLabel(student.status)}
+                  </span>
+                </div>
+              </div>
+
+              {/* Certification Results Grid */}
+              <div>
+                <h3 className="font-bold text-lg mb-3" style={{ color: "#1a4480" }}>Certification Results</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <div className="bg-blue-50 p-3 rounded">
+                    <p className="text-xs text-gray-600 uppercase font-bold">Certifiable Units</p>
+                    <p className="text-2xl font-bold" style={{ color: "#1a4480" }}>{student.certifiableUnits}</p>
+                  </div>
+                  <div className="bg-blue-50 p-3 rounded">
+                    <p className="text-xs text-gray-600 uppercase font-bold">Training Time</p>
+                    <p className="text-lg font-bold" style={{ color: "#1a4480" }}>{student.trainingTime}</p>
+                  </div>
+                  <div className="bg-blue-50 p-3 rounded">
+                    <p className="text-xs text-gray-600 uppercase font-bold">R/D Split</p>
+                    <p className="text-lg font-bold" style={{ color: "#1a4480" }}>{student.residentialUnits}/{student.distanceUnits}</p>
+                  </div>
+                  <div className="bg-blue-50 p-3 rounded">
+                    <p className="text-xs text-gray-600 uppercase font-bold">Rate of Pursuit</p>
+                    <p className="text-2xl font-bold" style={{ color: "#1a4480" }}>{student.rateOfPursuit.toFixed(2)}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Course Breakdown */}
+              <div>
+                <h3 className="font-bold text-lg mb-3" style={{ color: "#1a4480" }}>Course Breakdown</h3>
+                <div className="overflow-x-auto">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Course ID</th>
+                        <th>Title</th>
+                        <th>Units</th>
+                        <th>✓</th>
+                        <th>Modality</th>
+                        <th>Reason</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {student.courses.map((course, idx) => (
+                        <tr key={idx}>
+                          <td className="font-medium text-sm">{course.courseId}</td>
+                          <td className="text-sm">{course.title}</td>
+                          <td className="text-sm text-center">{course.units}</td>
+                          <td className="text-center font-bold" style={{ color: course.certifiable ? "#00a91c" : "#d54309" }}>
+                            {course.certifiable ? "✓" : "✗"}
+                          </td>
+                          <td className="text-sm">{course.modality}</td>
+                          <td className="text-sm text-gray-600">{course.exclusionReason || "-"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Flags */}
+              {student.flags.length > 0 && (
+                <div>
+                  <h3 className="font-bold text-lg mb-2" style={{ color: "#1a4480" }}>HITL Flags</h3>
+                  <div className="space-y-2">
+                    {student.flags.map((flag, idx) => (
+                      <div key={idx} className="bg-yellow-50 border-l-4 border-yellow-400 p-3 rounded text-sm text-yellow-800">
+                        {flag}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* SCO Queue Items */}
+              {student.scoQueueItems.length > 0 && (
+                <div>
+                  <h3 className="font-bold text-lg mb-2" style={{ color: "#1a4480" }}>SCO Exception Queue</h3>
+                  <div className="space-y-2">
+                    {student.scoQueueItems.map((item, idx) => (
+                      <div key={idx} className="bg-red-50 border-l-4 border-red-500 p-3 rounded text-sm text-red-800">
+                        {item}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Amendment Info */}
+              {student.amendment && (
+                <div>
+                  <h3 className="font-bold text-lg mb-3" style={{ color: "#1a4480" }}>Amendment Details</h3>
+                  <div className="bg-cyan-50 rounded-lg p-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-gray-600">Old Certifiable Units</p>
+                        <p className="text-xl font-bold text-gray-900">{student.amendment.oldCertifiableUnits}</p>
+                      </div>
+                      <span className="text-2xl text-gray-400">→</span>
+                      <div>
+                        <p className="text-sm text-gray-600">New Certifiable Units</p>
+                        <p className="text-xl font-bold text-cyan-700">{student.amendment.newCertifiableUnits}</p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-700">
+                      <strong>Course:</strong> {student.amendment.changedCourse}
+                    </p>
+                    <p className="text-sm text-gray-700">
+                      <strong>Reason:</strong> {student.amendment.changeDescription}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Approve Button */}
+              {(student.status === "pending_review" || student.status === "amendment_pending") && (
+                <div className="flex gap-3 pt-4 border-t border-gray-200">
+                  <button
+                    onClick={onClose}
+                    className="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 font-medium"
+                  >
+                    Close
+                  </button>
+                  <button
+                    className="flex-1 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 font-medium"
+                  >
+                    Approve
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Evaluation Logic
+    function evaluateStudentCertification(formData) {
+      let certifiableUnits = 0;
+      let residentialUnits = 0;
+      let distanceUnits = 0;
+      const flags = [];
+      const evaluatedCourses = [];
+
+      formData.courses.forEach(course => {
+        let certifiable = false;
+        let exclusionReason = null;
+
+        if (course.inDARs) {
+          if (course.modality === "Online") {
+            certifiable = true;
+            distanceUnits += course.units;
+          } else {
+            certifiable = true;
+            residentialUnits += course.units;
+          }
+        } else {
+          certifiable = false;
+          exclusionReason = "Not required for degree per DARS";
+        }
+
+        if (certifiable) {
+          certifiableUnits += course.units;
+        }
+
+        evaluatedCourses.push({
+          courseId: course.courseId,
+          title: course.title,
+          units: course.units,
+          certifiable,
+          modality: course.modality,
+          exclusionReason
+        });
+      });
+
+      // Determine training time
+      let trainingTime = "Less than Half-Time";
+      if (certifiableUnits >= 12) trainingTime = "Full-Time";
+      else if (certifiableUnits >= 9) trainingTime = "Three-Quarter Time";
+      else if (certifiableUnits >= 6) trainingTime = "Half-Time";
+
+      // Rate of pursuit (undergrad assumption)
+      const rateOfPursuit = Math.min(certifiableUnits / 12.0, 1.0);
+
+      // Determine status
+      let status = "certified";
+      if (certifiableUnits < 6) {
+        status = "pending";
+        flags.push("Enrolled units below half-time threshold — recommend SCO review");
+      }
+
+      return {
+        name: formData.name,
+        studentId: formData.studentId,
+        program: formData.program,
+        chapter: formData.chapter,
+        institution: formData.institution,
+        courses: evaluatedCourses,
+        certifiableUnits,
+        residentialUnits,
+        distanceUnits,
+        trainingTime,
+        rateOfPursuit,
+        status,
+        flags
+      };
+    }
+
+    // Render App
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<ClawBotApp />);
+  </script>
+</body>
+</html>
