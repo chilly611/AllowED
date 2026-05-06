@@ -884,22 +884,58 @@ CSUN_WEAMS_PROGRAM_NAMES = [
 # ---------------------------------------------------------------------------
 # Institution Registry — keyed by VA Facility Code
 # ---------------------------------------------------------------------------
-# Add new institutions here as they are scraped from the VA GI Bill Comparison Tool.
+# Load institutions from weams_all_schools.json (all 25 CSU schools)
+# Fallback to hardcoded SDSU and CSUN for backward compatibility
 
-INSTITUTION_REGISTRY = {
-    "11910105": {
+def _build_institution_registry():
+    """Build institution registry from weams_all_schools.json, with fallback to hardcoded data."""
+    registry = {}
+
+    # First, add the hardcoded SDSU and CSUN
+    registry["11910105"] = {
         "name": "San Diego State University",
         "short": "SDSU",
         "programs": SDSU_WEAMS_PROGRAM_NAMES,
         "scraped_date": "2026-04-10",
-    },
-    "11918105": {
+    }
+    registry["11918105"] = {
         "name": "California State University, Northridge",
         "short": "CSUN",
         "programs": CSUN_WEAMS_PROGRAM_NAMES,
         "scraped_date": "2026-04-10",
-    },
-}
+    }
+
+    # Try to load all 25 CSU schools from weams_all_schools.json
+    try:
+        import json
+        from pathlib import Path
+
+        # Find weams_all_schools.json relative to this file
+        current_dir = Path(__file__).parent
+        weams_path = current_dir / "weams_all_schools.json"
+
+        if weams_path.exists():
+            with open(weams_path, 'r') as f:
+                schools = json.load(f)
+                for school in schools:
+                    facility_code = school.get("facility_code", "")
+                    school_name = school.get("school", "")
+                    programs = school.get("programs", [])
+
+                    if facility_code and programs:
+                        registry[facility_code] = {
+                            "name": school_name,
+                            "short": facility_code,
+                            "programs": programs,
+                            "scraped_date": "2026-04-10",
+                        }
+    except Exception:
+        # If loading fails, continue with just SDSU and CSUN
+        pass
+
+    return registry
+
+INSTITUTION_REGISTRY = _build_institution_registry()
 
 # Default institution (backward compatibility)
 DEFAULT_FACILITY_CODE = "11910105"

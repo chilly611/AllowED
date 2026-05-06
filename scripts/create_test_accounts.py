@@ -47,7 +47,7 @@ TEST_ACCOUNTS = [
         "email": "sco@calpoly.test",
         "password": "AllowED2026!",
         "full_name": "Test SCO (Cal Poly)",
-        "institution_id": "11400104",  # Cal Poly SLO
+        "institution_id": "11906105",  # Cal Poly Humboldt
         "role": "sco",
     },
     {

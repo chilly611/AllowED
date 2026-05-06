@@ -439,7 +439,7 @@ def insert_students_to_db(client, institution_id: str, students: List[Dict]) -> 
         return 0
 
     try:
-        response = client.table("students").upsert(student_records).execute()
+        response = client.table("students").upsert(student_records, on_conflict="institution_id,student_id_internal").execute()
         return len(response.data) if response.data else 0
     except Exception as e:
         print(f"Warning: Could not insert students: {e}")
@@ -559,7 +559,7 @@ def run_decision_trees_and_store(
         }
 
         try:
-            enroll_response = client.table("enrollments").upsert([enrollment_data]).execute()
+            enroll_response = client.table("enrollments").upsert([enrollment_data], on_conflict="student_id,term_id").execute()
             if enroll_response.data:
                 enrollments_created += 1
                 enrollment_id = enroll_response.data[0]["id"]

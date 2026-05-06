@@ -195,6 +195,10 @@ def match_weams_program(declared_program: str, facility_code: str = "11910105") 
 
     weams_name, confidence = result
 
+    # Check if match failed (weams_name is None)
+    if weams_name is None:
+        return None
+
     # Build WEAMSProgram with the matched WEAMS entry
     # Parse degree prefix for the CIP code placeholder
     parts = weams_name.split(" ", 1)
@@ -479,7 +483,7 @@ def _compute_training_time(
       12+ = full-time, 9-11 = 3/4, 6-8 = 1/2, 4-5 = <1/2, 1-3 = 1/4 or less
 
     Graduate — SDSU definitions:
-      Master's: 9+ = full-time
+      Master's: 9+ = full-time, 6-8 = 3/4, 4-5 = 1/2, <4 = <1/2
       Doctoral: 6+ = full-time
 
     Rate of Pursuit = certifiable_units / full_time_units
@@ -506,9 +510,9 @@ def _compute_training_time(
 
         if certifiable_units >= 9:
             return TrainingTime.FULL_TIME, min(rop, 1.0)
-        elif certifiable_units >= 7:
+        elif certifiable_units >= 6:
             return TrainingTime.THREE_QUARTER, rop
-        elif certifiable_units >= 5:
+        elif certifiable_units >= 4:
             return TrainingTime.HALF_TIME, rop
         else:
             return TrainingTime.LESS_THAN_HALF, rop

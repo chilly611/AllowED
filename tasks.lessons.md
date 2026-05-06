@@ -16,3 +16,21 @@ Users will paste SQL into Terminal if you don't clearly label where to run comma
 
 ### Verify file copy completeness
 After copying from iCloud, glob for expected files (*.py, *.sql, etc.) and diff against source. Don't assume cp succeeded for all subdirectories.
+
+## Session 3 (May 4, 2026)
+
+### Graduate training time thresholds are NOT proportional to undergrad
+Don't just scale undergraduate brackets down. The VA has specific thresholds per academic level. Always verify against the SCO Handbook and Paulina's domain knowledge before coding.
+
+**Correct thresholds (credit hours, standard term):**
+
+Undergraduate: 12+ = full-time, 9-11 = 3/4, 6-8 = 1/2, 4-5 = <1/2, 1-3 = 1/4 or less
+
+Master's: 9+ = full-time, 6-8 = 3/4, 4-5 = 1/2, <4 = <1/2
+
+Doctoral: 6+ = full-time (also 799A/897/899 = full-time regardless of units)
+
+**The mistake:** Code had Master's as 7+ = 3/4, 5+ = 1/2 (wrong). Correct is 6+ = 3/4, 4+ = 1/2. A Master's student with 6 units is 3/4 time, not half-time.
+
+### Always check the project markdown files before guessing
+The project instructions (`Paulina_Claude_Project_Instructions.md`) contain verified Q&A from Paulina with authoritative answers on VA rules. Check there first before assuming or asking the user to re-explain something already documented.
