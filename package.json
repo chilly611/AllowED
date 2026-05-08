@@ -1,0 +1,23 @@
+{
+  "name": "allowed",
+  "version": "1.0.0",
+  "description": "",
+  "main": "create_presentation.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chilly611/AllowED.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chilly611/AllowED/issues"
+  },
+  "homepage": "https://github.com/chilly611/AllowED#readme",
+  "dependencies": {
+    "docx": "^9.6.1"
+  }
+}

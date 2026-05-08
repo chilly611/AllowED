@@ -834,6 +834,176 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* MODALS */
+        /* ═══════════════════════════════════════════════════════════════ */
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            display: none;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            padding: 2rem;
+            border-bottom: 1px solid var(--slate-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--slate-900);
+        }
+
+        .modal-close {
+            background: var(--slate-100);
+            border: 1px solid var(--slate-200);
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .modal-close:hover {
+            background: var(--slate-200);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-footer {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid var(--slate-200);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--slate-900);
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--slate-200);
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: inherit;
+            transition: all 150ms;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* BATCH CERTIFICATION ACTION BAR */
+        /* ═══════════════════════════════════════════════════════════════ */
+
+        .batch-action-bar {
+            position: fixed;
+            bottom: 0;
+            left: 80px;
+            right: 0;
+            background: white;
+            border-top: 1px solid var(--slate-200);
+            padding: 1rem 2rem;
+            display: none;
+            align-items: center;
+            gap: 2rem;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .batch-action-bar.show {
+            display: flex;
+        }
+
+        .batch-count {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--slate-900);
+        }
+
+        .batch-actions {
+            display: flex;
+            gap: 1rem;
+            margin-left: auto;
+        }
+
+        .batch-clear-link {
+            color: var(--slate-600);
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .batch-clear-link:hover {
+            color: var(--slate-900);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* CHECKBOX STYLING */
+        /* ═══════════════════════════════════════════════════════════════ */
+
+        input[type="checkbox"] {
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+            accent-color: var(--blue);
+        }
+
+        .checkbox-cell {
+            text-align: center;
+            padding: 1rem !important;
+        }
     </style>
 </head>
 <body>
@@ -890,6 +1060,10 @@
                 <button class="nav-icon" data-view="students" onclick="switchView(event, 'students')" title="Students">
                     <span>👥</span>
                     <span class="nav-label">Students</span>
+                </button>
+                <button class="nav-icon" data-view="amendments" onclick="switchView(event, 'amendments')" title="Amendments">
+                    <span>📝</span>
+                    <span class="nav-label">Amendments</span>
                 </button>
                 <button class="nav-icon" data-view="hitl" onclick="switchView(event, 'hitl')" title="HITL Queue">
                     <span>⚠️</span>
@@ -950,6 +1124,7 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
+                                            <th style="width: 50px;"><input type="checkbox" id="selectAllStudents" onchange="toggleSelectAll()" title="Select all"></th>
                                             <th>Name</th>
                                             <th>Student ID</th>
                                             <th>Program</th>
@@ -961,12 +1136,41 @@
                                         </tr>
                                     </thead>
                                     <tbody id="studentsTableBody">
-                                        <tr><td colspan="8" class="loading"><div class="spinner"></div> Loading...</td></tr>
+                                        <tr><td colspan="9" class="loading"><div class="spinner"></div> Loading...</td></tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                         <div class="pagination" id="studentsPagination"></div>
+                    </div>
+                </div>
+
+                <!-- AMENDMENTS VIEW -->
+                <div class="view" id="amendments-view">
+                    <div class="view-header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div class="view-title">Amendments</div>
+                        <button class="btn btn-primary" onclick="openCreateAmendmentModal()">Create Amendment</button>
+                    </div>
+                    <div class="view-body" style="display: flex; flex-direction: column;">
+                        <div class="table-wrapper">
+                            <div class="table-scroll">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Student</th>
+                                            <th>Reason</th>
+                                            <th>Effective Date</th>
+                                            <th>Status</th>
+                                            <th>Created</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="amendmentsTableBody">
+                                        <tr><td colspan="6" class="loading"><div class="spinner"></div> Loading...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -1069,6 +1273,90 @@
     <!-- TOAST NOTIFICATIONS -->
     <div class="toast-container" id="toastContainer"></div>
 
+    <!-- MODALS -->
+    <div class="modal-overlay" id="createAmendmentModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">Create Amendment</div>
+                <button class="modal-close" onclick="closeCreateAmendmentModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Student</label>
+                    <input type="text" id="amendmentStudentSearch" class="form-input" placeholder="Search by name or ID..." onchange="filterAmendmentStudents()">
+                    <div id="studentSuggestions" style="position: absolute; background: white; border: 1px solid var(--slate-200); border-radius: 6px; max-height: 150px; overflow-y: auto; margin-top: 0.5rem; min-width: 300px; display: none; z-index: 10;"></div>
+                    <input type="hidden" id="amendmentSelectedStudentId">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Amendment Reason</label>
+                    <select id="amendmentReason" class="form-select">
+                        <option value="">Select a reason...</option>
+                        <option value="Pre-registered but never attended">Pre-registered but never attended</option>
+                        <option value="Unsatisfactory attendance, progress or conduct">Unsatisfactory attendance, progress or conduct</option>
+                        <option value="Withdraw before beginning of term">Withdraw before beginning of term</option>
+                        <option value="Withdraw after drop period - non-punitive grades assigned">Withdraw after drop period - non-punitive grades assigned</option>
+                        <option value="Withdraw after drop period - punitive grades assigned">Withdraw after drop period - punitive grades assigned</option>
+                        <option value="Withdraw during drop period">Withdraw during drop period</option>
+                        <option value="Withdrawal or interruption (Non-College Degree Programs not on a term basis)">Withdrawal or interruption (Non-College Degree Programs not on a term basis)</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Effective Date</label>
+                    <input type="date" id="amendmentEffectiveDate" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Notes</label>
+                    <textarea id="amendmentNotes" class="form-textarea" placeholder="Additional context..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeCreateAmendmentModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitAmendment()">Create Amendment</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="batchCertificationModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">Confirm Batch Certification</div>
+                <button class="modal-close" onclick="closeBatchCertificationModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 1rem; color: var(--slate-600);">Review the following students before submitting for certification:</p>
+                <div class="table-wrapper">
+                    <div class="table-scroll">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Units</th>
+                                    <th>Training Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="batchCertificationList">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <p style="margin-top: 1rem; color: var(--slate-900); font-weight: 600;" id="batchCertificationCount"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeBatchCertificationModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="confirmBatchCertification()">Confirm & Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="batch-action-bar" id="batchActionBar">
+        <span class="batch-count" id="batchCountText">0 students selected</span>
+        <div class="batch-actions">
+            <button class="btn btn-primary" onclick="openBatchCertificationModal()">Certify Selected</button>
+            <span class="batch-clear-link" onclick="clearSelection()">Clear Selection</span>
+        </div>
+    </div>
+
     <!-- Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -1091,7 +1379,10 @@
         const state = {
             currentStudentsPage: 1,
             searchQuery: '',
-            selectedStudentId: null
+            selectedStudentId: null,
+            selectedStudentIds: new Set(),
+            allStudents: [],
+            batchCertificationInProgress: false
         };
 
         /* ═══════════════════════════════════════════════════════════════ */
@@ -1276,6 +1567,7 @@
 
             if (viewName === 'students') loadStudents();
             else if (viewName === 'hitl') loadHitl();
+            else if (viewName === 'amendments') loadAmendments();
             else if (viewName === 'dashboard') loadDashboard();
         }
 
@@ -1367,14 +1659,22 @@
                 const allStudents = await queryStudents();
                 const enrollments = await queryEnrollments();
                 const enrollmentMap = {};
+                const studentEnrollmentMap = {};
                 enrollments.forEach(e => {
                     enrollmentMap[e.student_id] = e;
+                    studentEnrollmentMap[e.student_id] = e;
                 });
 
-                let filtered = allStudents;
+                const enrichedStudents = allStudents.map(s => ({
+                    ...s,
+                    enrollment: studentEnrollmentMap[s.id] || {}
+                }));
+                state.allStudents = enrichedStudents;
+
+                let filtered = enrichedStudents;
                 if (state.searchQuery) {
                     const query = state.searchQuery.toLowerCase();
-                    filtered = allStudents.filter(s =>
+                    filtered = enrichedStudents.filter(s =>
                         (s.first_name + ' ' + s.last_name).toLowerCase().includes(query) ||
                         s.student_id_internal.toLowerCase().includes(query)
                     );
@@ -1389,31 +1689,35 @@
                 tbody.innerHTML = '';
 
                 if (paginated.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="empty-icon">📭</div><div class="empty-title">No students found</div></div></td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="9"><div class="empty-state"><div class="empty-icon">📭</div><div class="empty-title">No students found</div></div></td></tr>';
                     document.getElementById('studentsPagination').innerHTML = '';
                     return;
                 }
 
                 paginated.forEach(student => {
-                    const enrollment = enrollmentMap[student.id] || {};
+                    const enrollment = student.enrollment || {};
                     const row = document.createElement('tr');
-                    row.className = 'table-row-clickable';
-                    row.onclick = () => viewStudentDetail(student.id);
 
                     const statusBadge = `<span class="badge ${enrollment.status || 'pending'}">${enrollment.status || 'pending'}</span>`;
                     const level = student.academic_level || '-';
                     const units = enrollment.total_certifiable_units || 0;
                     const training = enrollment.training_time || '-';
 
+                    const isSelectable = enrollment.status === 'ready_for_batch';
+                    const isChecked = state.selectedStudentIds.has(student.id) ? 'checked' : '';
+
                     row.innerHTML = `
-                        <td><strong>${student.first_name} ${student.last_name}</strong></td>
-                        <td>${student.student_id_internal || 'N/A'}</td>
-                        <td>${student.program || '-'}</td>
-                        <td>${student.benefit_chapter || '-'}</td>
-                        <td>${level}</td>
-                        <td>${statusBadge}</td>
-                        <td>${units}</td>
-                        <td>${training}</td>
+                        <td class="checkbox-cell">
+                            ${isSelectable ? `<input type="checkbox" class="student-checkbox" data-student-id="${student.id}" ${isChecked} onchange="toggleStudentSelection(${student.id}, '${student.first_name} ${student.last_name}', ${units}, '${training}')">` : ''}
+                        </td>
+                        <td class="table-row-clickable" onclick="viewStudentDetail(${student.id})"><strong>${student.first_name} ${student.last_name}</strong></td>
+                        <td class="table-row-clickable" onclick="viewStudentDetail(${student.id})">${student.student_id_internal || 'N/A'}</td>
+                        <td class="table-row-clickable" onclick="viewStudentDetail(${student.id})">${student.program || '-'}</td>
+                        <td class="table-row-clickable" onclick="viewStudentDetail(${student.id})">${student.benefit_chapter || '-'}</td>
+                        <td class="table-row-clickable" onclick="viewStudentDetail(${student.id})">${level}</td>
+                        <td class="table-row-clickable" onclick="viewStudentDetail(${student.id})">${statusBadge}</td>
+                        <td class="table-row-clickable" onclick="viewStudentDetail(${student.id})">${units}</td>
+                        <td class="table-row-clickable" onclick="viewStudentDetail(${student.id})">${training}</td>
                     `;
                     tbody.appendChild(row);
                 });
@@ -1440,6 +1744,8 @@
                     nextBtn.onclick = () => loadStudents(page + 1);
                     paginationEl.appendChild(nextBtn);
                 }
+
+                updateSelectAllCheckbox();
             } catch (err) {
                 console.error('Error loading students:', err);
                 toast('Failed to load students', 'error');
@@ -1672,6 +1978,408 @@
                 badge.style.display = 'block';
             } else {
                 badge.style.display = 'none';
+            }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* BATCH CERTIFICATION */
+        /* ═══════════════════════════════════════════════════════════════ */
+
+        function toggleStudentSelection(studentId, studentName, units, training) {
+            if (state.selectedStudentIds.has(studentId)) {
+                state.selectedStudentIds.delete(studentId);
+            } else {
+                state.selectedStudentIds.add(studentId);
+            }
+            updateBatchActionBar();
+            updateSelectAllCheckbox();
+        }
+
+        function toggleSelectAll() {
+            const checkbox = document.getElementById('selectAllStudents');
+            const checkboxes = document.querySelectorAll('.student-checkbox:not(:disabled)');
+
+            if (checkbox.checked) {
+                checkboxes.forEach(cb => {
+                    const studentId = parseInt(cb.dataset.studentId);
+                    state.selectedStudentIds.add(studentId);
+                    cb.checked = true;
+                });
+            } else {
+                checkboxes.forEach(cb => {
+                    const studentId = parseInt(cb.dataset.studentId);
+                    state.selectedStudentIds.delete(studentId);
+                    cb.checked = false;
+                });
+            }
+            updateBatchActionBar();
+        }
+
+        function updateSelectAllCheckbox() {
+            const checkbox = document.getElementById('selectAllStudents');
+            const checkboxes = document.querySelectorAll('.student-checkbox:not(:disabled)');
+
+            if (checkboxes.length === 0) {
+                checkbox.checked = false;
+                checkbox.disabled = true;
+                return;
+            }
+
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+            checkbox.checked = allChecked;
+            checkbox.disabled = false;
+        }
+
+        function updateBatchActionBar() {
+            const bar = document.getElementById('batchActionBar');
+            const count = state.selectedStudentIds.size;
+
+            if (count > 0) {
+                bar.classList.add('show');
+                const countText = document.getElementById('batchCountText');
+                countText.textContent = `${count} student${count !== 1 ? 's' : ''} selected`;
+
+                const viewBody = document.querySelector('.view.active .view-body');
+                if (viewBody) {
+                    viewBody.style.paddingBottom = '100px';
+                }
+            } else {
+                bar.classList.remove('show');
+                const viewBody = document.querySelector('.view.active .view-body');
+                if (viewBody) {
+                    viewBody.style.paddingBottom = '2rem';
+                }
+            }
+        }
+
+        function clearSelection() {
+            state.selectedStudentIds.clear();
+            document.querySelectorAll('.student-checkbox').forEach(cb => cb.checked = false);
+            updateBatchActionBar();
+            updateSelectAllCheckbox();
+        }
+
+        function openBatchCertificationModal() {
+            if (state.selectedStudentIds.size === 0) {
+                toast('No students selected', 'warning');
+                return;
+            }
+
+            const selectedIds = Array.from(state.selectedStudentIds);
+            const selectedStudents = state.allStudents.filter(s => selectedIds.includes(s.id));
+
+            const tbody = document.getElementById('batchCertificationList');
+            tbody.innerHTML = '';
+
+            let totalUnits = 0;
+            selectedStudents.forEach(student => {
+                const row = document.createElement('tr');
+                const units = parseInt(student.enrollment?.total_certifiable_units || 0);
+                totalUnits += units;
+
+                row.innerHTML = `
+                    <td><strong>${student.first_name} ${student.last_name}</strong></td>
+                    <td>${units}</td>
+                    <td>${student.enrollment?.training_time || '-'}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            document.getElementById('batchCertificationCount').textContent = `Total: ${selectedStudents.length} students`;
+            document.getElementById('batchCertificationModal').classList.add('show');
+        }
+
+        function closeBatchCertificationModal() {
+            document.getElementById('batchCertificationModal').classList.remove('show');
+        }
+
+        async function confirmBatchCertification() {
+            if (state.batchCertificationInProgress) return;
+            state.batchCertificationInProgress = true;
+
+            try {
+                const selectedIds = Array.from(state.selectedStudentIds);
+                const enrollments = await queryEnrollments();
+                const enrollmentIds = enrollments
+                    .filter(e => selectedIds.includes(e.student_id) && e.status === 'ready_for_batch')
+                    .map(e => e.id);
+
+                if (enrollmentIds.length === 0) {
+                    toast('No valid enrollments to submit', 'warning');
+                    state.batchCertificationInProgress = false;
+                    return;
+                }
+
+                const now = new Date().toISOString();
+                for (const enrollmentId of enrollmentIds) {
+                    const { error } = await supabaseClient
+                        .from('enrollments')
+                        .update({
+                            status: 'submitted',
+                            submitted_at: now
+                        })
+                        .eq('id', enrollmentId);
+
+                    if (error) throw error;
+                }
+
+                closeBatchCertificationModal();
+                clearSelection();
+                loadStudents(1);
+                toast(`${enrollmentIds.length} student${enrollmentIds.length !== 1 ? 's' : ''} submitted for certification`, 'success');
+                state.batchCertificationInProgress = false;
+            } catch (err) {
+                console.error('Error submitting batch certification:', err);
+                toast('Failed to submit batch certification', 'error');
+                state.batchCertificationInProgress = false;
+            }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* AMENDMENTS */
+        /* ═══════════════════════════════════════════════════════════════ */
+
+        async function loadAmendments() {
+            if (!institutionId) return;
+
+            try {
+                const { data: amendments, error: amendmentError } = await supabaseClient
+                    .from('amendments')
+                    .select('*')
+                    .eq('institution_id', institutionId)
+                    .order('created_at', { ascending: false });
+
+                if (amendmentError) throw amendmentError;
+
+                const enrollmentIds = amendments.map(a => a.enrollment_id);
+                let enrollmentMap = {};
+                let studentMap = {};
+
+                if (enrollmentIds.length > 0) {
+                    const { data: enrollments, error: enrollmentError } = await supabaseClient
+                        .from('enrollments')
+                        .select('id, student_id')
+                        .in('id', enrollmentIds);
+
+                    if (enrollmentError) throw enrollmentError;
+
+                    const studentIds = enrollments.map(e => e.student_id);
+                    const { data: students, error: studentError } = await supabaseClient
+                        .from('students')
+                        .select('id, first_name, last_name')
+                        .in('id', studentIds);
+
+                    if (studentError) throw studentError;
+
+                    enrollments.forEach(e => {
+                        enrollmentMap[e.id] = e;
+                    });
+
+                    students.forEach(s => {
+                        studentMap[s.id] = `${s.first_name} ${s.last_name}`;
+                    });
+                }
+
+                const tbody = document.getElementById('amendmentsTableBody');
+                tbody.innerHTML = '';
+
+                if (amendments.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">📄</div><div class="empty-title">No amendments yet</div></div></td></tr>';
+                    return;
+                }
+
+                amendments.forEach(amendment => {
+                    const enrollment = enrollmentMap[amendment.enrollment_id] || {};
+                    const studentName = studentMap[enrollment.student_id] || 'Unknown';
+                    const statusColor = amendment.status === 'pending_review' ? 'amber' :
+                                       amendment.status === 'approved' ? 'green' :
+                                       amendment.status === 'rejected' ? 'red' : 'blue';
+                    const statusBadge = `<span class="badge ${statusColor}">${amendment.status}</span>`;
+
+                    const createdDate = new Date(amendment.created_at).toLocaleDateString();
+                    const effectiveDate = amendment.effective_date ? new Date(amendment.effective_date).toLocaleDateString() : '-';
+
+                    const row = document.createElement('tr');
+                    let actionHtml = '';
+
+                    if (amendment.status === 'pending_review') {
+                        actionHtml = `
+                            <button class="btn btn-success" onclick="approveAmendment(${amendment.id})">Approve</button>
+                            <button class="btn btn-danger" style="margin-left: 0.5rem;" onclick="rejectAmendment(${amendment.id})">Reject</button>
+                        `;
+                    }
+
+                    row.innerHTML = `
+                        <td>${studentName}</td>
+                        <td>${amendment.amendment_reason || '-'}</td>
+                        <td>${effectiveDate}</td>
+                        <td>${statusBadge}</td>
+                        <td>${createdDate}</td>
+                        <td>${actionHtml || '-'}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (err) {
+                console.error('Error loading amendments:', err);
+                toast('Failed to load amendments', 'error');
+            }
+        }
+
+        function openCreateAmendmentModal() {
+            document.getElementById('amendmentStudentSearch').value = '';
+            document.getElementById('amendmentReason').value = '';
+            document.getElementById('amendmentEffectiveDate').value = '';
+            document.getElementById('amendmentNotes').value = '';
+            document.getElementById('amendmentSelectedStudentId').value = '';
+            document.getElementById('studentSuggestions').style.display = 'none';
+            document.getElementById('createAmendmentModal').classList.add('show');
+        }
+
+        function closeCreateAmendmentModal() {
+            document.getElementById('createAmendmentModal').classList.remove('show');
+        }
+
+        async function filterAmendmentStudents() {
+            const searchTerm = document.getElementById('amendmentStudentSearch').value.toLowerCase();
+            const suggestionsEl = document.getElementById('studentSuggestions');
+
+            if (!searchTerm || searchTerm.length < 1) {
+                suggestionsEl.style.display = 'none';
+                return;
+            }
+
+            try {
+                const { data: students, error } = await supabaseClient
+                    .from('students')
+                    .select('id, first_name, last_name, student_id_internal')
+                    .eq('institution_id', institutionId)
+                    .ilike('first_name', `%${searchTerm}%`)
+                    .or(`last_name.ilike.%${searchTerm}%`)
+                    .or(`student_id_internal.ilike.%${searchTerm}%`)
+                    .limit(10);
+
+                if (error) throw error;
+
+                if (students && students.length > 0) {
+                    suggestionsEl.innerHTML = '';
+                    students.forEach(student => {
+                        const option = document.createElement('div');
+                        option.style.padding = '0.5rem 1rem';
+                        option.style.cursor = 'pointer';
+                        option.style.borderBottom = '1px solid var(--slate-200)';
+                        option.textContent = `${student.first_name} ${student.last_name} (${student.student_id_internal})`;
+                        option.onclick = () => {
+                            document.getElementById('amendmentStudentSearch').value = `${student.first_name} ${student.last_name}`;
+                            document.getElementById('amendmentSelectedStudentId').value = student.id;
+                            suggestionsEl.style.display = 'none';
+                        };
+                        option.onmouseover = () => {
+                            option.style.background = 'var(--slate-100)';
+                        };
+                        option.onmouseout = () => {
+                            option.style.background = 'white';
+                        };
+                        suggestionsEl.appendChild(option);
+                    });
+                    suggestionsEl.style.display = 'block';
+                } else {
+                    suggestionsEl.innerHTML = '<div style="padding: 0.5rem 1rem; color: var(--slate-600);">No students found</div>';
+                    suggestionsEl.style.display = 'block';
+                }
+            } catch (err) {
+                console.error('Error filtering students:', err);
+            }
+        }
+
+        async function submitAmendment() {
+            const studentId = parseInt(document.getElementById('amendmentSelectedStudentId').value);
+            const reason = document.getElementById('amendmentReason').value;
+            const effectiveDate = document.getElementById('amendmentEffectiveDate').value;
+            const notes = document.getElementById('amendmentNotes').value;
+
+            if (!studentId || !reason || !effectiveDate) {
+                toast('Please fill in all required fields', 'warning');
+                return;
+            }
+
+            try {
+                if (!currentTerm) {
+                    toast('No active term found', 'error');
+                    return;
+                }
+
+                const { data: enrollments, error: enrollmentError } = await supabaseClient
+                    .from('enrollments')
+                    .select('*')
+                    .eq('student_id', studentId)
+                    .eq('term_id', currentTerm.id)
+                    .single();
+
+                if (enrollmentError) {
+                    toast('No enrollment found for this student', 'error');
+                    return;
+                }
+
+                const { error } = await supabaseClient
+                    .from('amendments')
+                    .insert([{
+                        enrollment_id: enrollments.id,
+                        institution_id: institutionId,
+                        amendment_reason: reason,
+                        effective_date: effectiveDate,
+                        original_data: JSON.stringify(enrollments),
+                        revised_data: JSON.stringify({}),
+                        status: 'pending_review',
+                        hitl_required: false,
+                        notes: notes
+                    }]);
+
+                if (error) throw error;
+
+                closeCreateAmendmentModal();
+                loadAmendments();
+                toast('Amendment created successfully', 'success');
+            } catch (err) {
+                console.error('Error creating amendment:', err);
+                toast('Failed to create amendment', 'error');
+            }
+        }
+
+        async function approveAmendment(amendmentId) {
+            try {
+                const { error } = await supabaseClient
+                    .from('amendments')
+                    .update({
+                        status: 'approved',
+                        approved_by: currentUser.id,
+                        approved_at: new Date().toISOString()
+                    })
+                    .eq('id', amendmentId);
+
+                if (error) throw error;
+
+                loadAmendments();
+                toast('Amendment approved', 'success');
+            } catch (err) {
+                console.error('Error approving amendment:', err);
+                toast('Failed to approve amendment', 'error');
+            }
+        }
+
+        async function rejectAmendment(amendmentId) {
+            try {
+                const { error } = await supabaseClient
+                    .from('amendments')
+                    .update({ status: 'rejected' })
+                    .eq('id', amendmentId);
+
+                if (error) throw error;
+
+                loadAmendments();
+                toast('Amendment rejected', 'success');
+            } catch (err) {
+                console.error('Error rejecting amendment:', err);
+                toast('Failed to reject amendment', 'error');
             }
         }
 
