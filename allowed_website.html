@@ -837,18 +837,98 @@ img { max-width: 100%; }
 <!-- ====== CTA ====== -->
 <section class="cta-section" id="cta">
   <div class="container">
-    <h2 class="reveal">The VA is spending $2.3 billion<br>to automate their side.<br><span style="background:linear-gradient(135deg,var(--orange),var(--orange-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">We're building yours.</span></h2>
-    <p class="reveal reveal-delay-1">AllowED is accepting early-access partners from universities ready to transform how they serve veteran students.</p>
-    <div class="cta-buttons reveal reveal-delay-2">
-      <button class="btn-primary" style="font-size:1.1rem;padding:18px 40px;" onclick="document.getElementById('contactEmail').focus()">Request Early Access</button>
-      <button class="btn-secondary" onclick="scrollToSection('how-it-works')">Watch Demo</button>
-    </div>
-    <div class="reveal reveal-delay-3" style="margin-top:40px;">
-      <input type="email" id="contactEmail" placeholder="Enter your work email" style="padding:16px 24px;border-radius:100px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:white;font-size:1rem;width:100%;max-width:400px;outline:none;text-align:center;" />
-      <div style="margin-top:12px;font-size:0.8rem;color:rgba(255,255,255,0.4);">No spam. We'll reach out personally within 24 hours.</div>
+    <h2 class="reveal">Ready to retire the<br><span style="background:linear-gradient(135deg,var(--orange),var(--orange-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">spreadsheets?</span></h2>
+    <p class="reveal reveal-delay-1">AllowED is accepting early-access partners from universities ready to transform how they serve veteran students. Request a demo and we'll walk you through a live certification.</p>
+
+    <div id="demoFormContainer" class="reveal reveal-delay-2" style="margin-top:32px;max-width:520px;margin-left:auto;margin-right:auto;">
+      <form id="demoForm" onsubmit="submitDemoRequest(event)" style="display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;gap:12px;">
+          <input type="text" name="first_name" placeholder="First name *" required style="flex:1;padding:14px 18px;border-radius:10px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);color:white;font-size:0.95rem;outline:none;" />
+          <input type="text" name="last_name" placeholder="Last name *" required style="flex:1;padding:14px 18px;border-radius:10px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);color:white;font-size:0.95rem;outline:none;" />
+        </div>
+        <input type="email" name="email" placeholder="Work email *" required style="padding:14px 18px;border-radius:10px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);color:white;font-size:0.95rem;outline:none;" />
+        <input type="tel" name="phone" placeholder="Phone (optional)" style="padding:14px 18px;border-radius:10px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);color:white;font-size:0.95rem;outline:none;" />
+        <input type="text" name="institution" placeholder="Institution *" required style="padding:14px 18px;border-radius:10px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);color:white;font-size:0.95rem;outline:none;" />
+        <select name="role" required style="padding:14px 18px;border-radius:10px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);font-size:0.95rem;outline:none;appearance:auto;">
+          <option value="" disabled selected>Your role *</option>
+          <option value="SCO">School Certifying Official</option>
+          <option value="VA Director">VA / Veteran Services Director</option>
+          <option value="Registrar">Registrar</option>
+          <option value="Financial Aid">Financial Aid Director</option>
+          <option value="IT Leadership">CIO / IT Leadership</option>
+          <option value="Administration">Provost / Academic Affairs</option>
+          <option value="Compliance">Compliance / Audit</option>
+          <option value="Other">Other</option>
+        </select>
+        <select name="gi_bill_volume" style="padding:14px 18px;border-radius:10px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);font-size:0.95rem;outline:none;appearance:auto;">
+          <option value="" disabled selected>GI Bill volume / semester (optional)</option>
+          <option value="<250">Fewer than 250</option>
+          <option value="250-500">250 - 500</option>
+          <option value="500-1000">500 - 1,000</option>
+          <option value="1000-2500">1,000 - 2,500</option>
+          <option value="2500+">2,500+</option>
+          <option value="unsure">Not sure</option>
+        </select>
+        <textarea name="notes" placeholder="Anything specific you'd like to see? (optional)" rows="3" style="padding:14px 18px;border-radius:10px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);color:white;font-size:0.95rem;outline:none;resize:vertical;font-family:inherit;"></textarea>
+        <button type="submit" id="demoSubmitBtn" class="btn-primary" style="font-size:1.05rem;padding:16px 40px;margin-top:4px;width:100%;cursor:pointer;">Request Demo</button>
+        <div style="font-size:0.75rem;color:rgba(255,255,255,0.35);text-align:center;">We'll only use this to reach out about AllowED. No spam. Paulina reads every submission.</div>
+      </form>
+      <div id="demoFormSuccess" style="display:none;text-align:center;padding:40px 20px;">
+        <div style="font-size:2.5rem;margin-bottom:12px;">&#10003;</div>
+        <h3 style="color:white;font-size:1.3rem;margin-bottom:8px;">You're on the list!</h3>
+        <p style="color:rgba(255,255,255,0.6);font-size:0.95rem;">Paulina will reach out personally within 24 hours to schedule your live demo.</p>
+      </div>
     </div>
   </div>
 </section>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+async function submitDemoRequest(e) {
+  e.preventDefault();
+  const btn = document.getElementById('demoSubmitBtn');
+  btn.textContent = 'Submitting...';
+  btn.disabled = true;
+
+  const form = document.getElementById('demoForm');
+  const data = {
+    first_name: form.first_name.value.trim(),
+    last_name: form.last_name.value.trim(),
+    email: form.email.value.trim(),
+    phone: form.phone.value.trim() || null,
+    institution: form.institution.value.trim(),
+    role: form.role.value,
+    gi_bill_volume: form.gi_bill_volume.value || null,
+    notes: form.notes.value.trim() || null,
+  };
+
+  try {
+    const sb = window.supabase.createClient(
+      'https://cwxkpsnjsxaupncqyojq.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3eGtwc25qc3hhdXBuY3F5b2pxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzMTk3ODYsImV4cCI6MjA5MTg5NTc4Nn0.BhH_wdP4vVkgUoZ8MPlgwkfugJvnBzM_PT-_aRy1EpM'
+    );
+    const { error } = await sb.from('demo_requests').insert([data]);
+    if (error) throw error;
+
+    document.getElementById('demoForm').style.display = 'none';
+    document.getElementById('demoFormSuccess').style.display = 'block';
+  } catch (err) {
+    console.error('Submission error:', err);
+    // Fallback: open mailto
+    const subject = encodeURIComponent('AllowED Demo Request - ' + data.institution);
+    const body = encodeURIComponent(
+      'Name: ' + data.first_name + ' ' + data.last_name +
+      '\nEmail: ' + data.email +
+      '\nPhone: ' + (data.phone || 'N/A') +
+      '\nInstitution: ' + data.institution +
+      '\nRole: ' + data.role +
+      '\nGI Bill Volume: ' + (data.gi_bill_volume || 'N/A') +
+      '\nNotes: ' + (data.notes || 'N/A')
+    );
+    window.location.href = 'mailto:paulina0101@gmail.com?subject=' + subject + '&body=' + body;
+  }
+}
+</script>
 
 <!-- ====== FOOTER ====== -->
 <footer class="footer">
